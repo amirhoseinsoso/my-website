@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>امیرحسین سبحانی کیا | انیمیشن ساز و برنامه نویس</title>
+<meta name="description" content="سایت شخصی امیرحسین سبحانی کیا — انیمیشن ساز، برنامه نویس و دانش آموز مدرسه شهید بهشتی نیشابور">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════ متغیرها ═══════════════════════ */
+:root{
+  --bg:#07060d;
+  --bg-2:#0b0916;
+  --surface:rgba(255,255,255,.045);
+  --surface-2:rgba(255,255,255,.085);
+  --stroke:rgba(255,255,255,.10);
+  --stroke-2:rgba(255,255,255,.18);
+  --text:#f2f0fb;
+  --muted:#9a96b8;
+  --p1:#8b5cff;
+  --p2:#22d3ee;
+  --p3:#ff4d8d;
+  --particle-rgb:150,110,255;
+  --shadow-sm:0 10px 30px -10px rgba(0,0,0,.7);
+  --shadow-lg:0 40px 90px -25px rgba(0,0,0,.85);
+  --glow-1:0 0 60px -12px rgba(139,92,255,.6);
+  --glow-2:0 0 60px -12px rgba(34,211,238,.55);
+  --r:24px;
+}
+html[data-theme="light"]{
+  --bg:#f4f3fa;
+  --bg-2:#ffffff;
+  --surface:rgba(255,255,255,.72);
+  --surface-2:rgba(255,255,255,.95);
+  --stroke:rgba(35,20,90,.10);
+  --stroke-2:rgba(35,20,90,.20);
+  --text:#12102a;
+  --muted:#605a80;
+  --particle-rgb:105,70,215;
+  --shadow-sm:0 10px 30px -12px rgba(60,35,140,.22);
+  --shadow-lg:0 40px 80px -28px rgba(60,35,140,.28);
+}
+
+/* ═══════════════════════ پایه ═══════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{
+  font-family:'Vazirmatn',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);
+  line-height:1.9;overflow-x:clip;
+  transition:background .5s ease,color .5s ease;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:var(--p1);color:#fff}
+html{scrollbar-width:thin;scrollbar-color:var(--p1) transparent}
+::-webkit-scrollbar{width:9px}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--p1),var(--p2));border-radius:9px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* کرسر بومی روی دسکتاپ مخفی */
+@media (hover:hover) and (pointer:fine){
+  body,a,button,input,textarea,label{cursor:none}
+}
+
+/* ═══════════════════════ لایههای پسزمینه ═══════════════════════ */
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+.spotlight{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(560px circle at var(--mx,50%) var(--my,50%),
+             color-mix(in srgb,var(--p1) 16%,transparent), transparent 62%);
+  opacity:0;transition:opacity .6s ease;
+}
+body.mouse-on .spotlight{opacity:1}
+.blobs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.blobs span{
+  position:absolute;border-radius:50%;filter:blur(110px);opacity:.32;
+  will-change:transform;transition:background .5s ease;
+}
+.blobs .b1{width:560px;height:560px;background:var(--p1);top:-160px;right:-140px}
+.blobs .b2{width:520px;height:520px;background:var(--p2);bottom:-200px;left:-160px;opacity:.24}
+.blobs .b3{width:420px;height:420px;background:var(--p3);top:42%;left:48%;opacity:.18}
+html[data-theme="light"] .blobs span{opacity:.20}
+
+.grain{
+  position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:240px 240px;
+  animation:grainMove 8s steps(6) infinite;
+}
+@keyframes grainMove{
+  0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}
+  40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-2%)}
+  80%{transform:translate(3%,1%)}100%{transform:translate(0,0)}
+}
+.vignette{
+  position:fixed;inset:0;z-index:59;pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 0%,transparent 40%,color-mix(in srgb,var(--bg) 70%,transparent) 100%);
+}
+
+/* ═══════════════════════ کرسر سفارشی ═══════════════════════ */
+.cursor{position:fixed;inset:0;z-index:9998;pointer-events:none;display:none}
+@media (hover:hover) and (pointer:fine){.cursor{display:block}}
+.c-dot,.c-ring{
+  position:fixed;top:0;left:0;border-radius:50%;
+  will-change:transform;
+}
+.c-dot{
+  width:6px;height:6px;background:var(--text);
+  transform:translate3d(var(--dx,0px),var(--dy,0px),0) translate(-50%,-50%) scale(var(--ds,1));
+  transition:opacity .3s ease, background .3s ease;
+  z-index:2;
+}
+.c-ring{
+  width:40px;height:40px;
+  border:1.5px solid color-mix(in srgb,var(--text) 45%,transparent);
+  transform:translate3d(var(--x,0px),var(--y,0px),0) translate(-50%,-50%) scale(var(--s,1));
+  transition:border-color .3s ease, background .3s ease, opacity .3s ease;
+  display:grid;place-items:center;
+}
+.c-label{
+  font-size:.62rem;font-weight:800;letter-spacing:.4px;
+  opacity:0;transform:scale(.6);transition:.3s ease;color:var(--bg);
+  white-space:nowrap;
+}
+.cursor.is-hover .c-ring{
+  --s:1.85;background:var(--text);border-color:transparent;
+  box-shadow:0 0 30px -4px color-mix(in srgb,var(--text) 55%,transparent);
+}
+.cursor.is-hover .c-dot{--ds:0;opacity:0}
+.cursor.has-label .c-ring{--s:2.9}
+.cursor.has-label .c-label{opacity:1;transform:scale(1)}
+.cursor.is-down .c-ring{--s:.75}
+html[data-theme="light"] .c-label{color:#fff}
+html[data-theme="light"] .cursor.is-hover .c-ring{background:var(--text)}
+
+/* ═══════════════════════ پیشبارگذار ═══════════════════════ */
+#preloader{
+  position:fixed;inset:0;z-index:10000;display:grid;place-items:center;
+  background:var(--bg);
+  clip-path:inset(0 0 0 0);
+  transition:clip-path 1s cubic-bezier(.76,0,.24,1), opacity .5s ease .6s;
+}
+#preloader.done{clip-path:inset(0 0 100% 0)}
+.pl-inner{display:grid;justify-items:center;gap:20px;text-align:center}
+.pl-name{font-weight:900;font-size:1.05rem;letter-spacing:.5px}
+.pl-bar{
+  width:min(240px,60vw);height:3px;border-radius:9px;
+  background:var(--stroke);overflow:hidden;
+}
+.pl-bar i{display:block;height:100%;width:0;border-radius:9px;
+  background:linear-gradient(90deg,var(--p1),var(--p2),var(--p3));
+  box-shadow:0 0 18px var(--p1)}
+.pl-count{font-size:.8rem;color:var(--muted);font-weight:700;letter-spacing:2px}
+
+/* ═══════════════════════ نوار پیشرفت ═══════════════════════ */
+.progress{position:fixed;top:0;right:0;left:0;height:3px;z-index:999;pointer-events:none}
+.progress i{
+  display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--p1),var(--p2),var(--p3));
+  box-shadow:0 0 18px color-mix(in srgb,var(--p1) 80%,transparent);
+}
+
+/* ═══════════════════════ ناوبری ═══════════════════════ */
+.nav{
+  position:fixed;top:0;right:0;left:0;z-index:900;
+  padding:20px 0;transition:padding .4s ease,background .4s ease,border-color .4s ease;
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{
+  padding:10px 0;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);
+  backdrop-filter:blur(22px) saturate(140%);
+  border-bottom-color:var(--stroke);
+}
+.nav-inner{
+  max-width:1180px;margin:0 auto;padding:0 26px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+}
+.logo{display:flex;align-items:center;gap:11px;font-weight:900;font-size:.98rem}
+.logo-mark{
+  width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--p1),var(--p2));
+  color:#fff;font-weight:900;font-size:1.05rem;
+  box-shadow:0 10px 26px -6px color-mix(in srgb,var(--p1) 70%,transparent);
+  transition:transform .5s cubic-bezier(.2,.9,.3,1.5), box-shadow .4s;
+}
+.logo:hover .logo-mark{transform:rotate(-14deg) scale(1.1);box-shadow:0 14px 34px -6px var(--p1)}
+.logo small{display:block;font-size:.58rem;font-weight:500;color:var(--muted);
+  letter-spacing:2.4px;line-height:1.2}
+
+.nav-links{display:flex;align-items:center;gap:4px;list-style:none}
+.nav-links a{
+  position:relative;padding:9px 15px;border-radius:12px;
+  font-size:.88rem;font-weight:600;color:var(--muted);
+  transition:color .3s ease,background .3s ease;overflow:hidden;
+}
+.nav-links a::before{
+  content:"";position:absolute;inset:0;border-radius:12px;z-index:-1;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--p1) 22%,transparent),
+             color-mix(in srgb,var(--p2) 22%,transparent));
+  opacity:0;transform:scale(.7);transition:.35s cubic-bezier(.2,.9,.3,1.4);
+}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::before{opacity:1;transform:scale(1)}
+.nav-links a.active{color:var(--text)}
+.nav-links a.active::after{
+  content:"";position:absolute;bottom:2px;right:50%;transform:translateX(50%);
+  width:20px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,var(--p1),var(--p2));
+  box-shadow:0 0 10px var(--p1);
+}
+.nav-tools{display:flex;align-items:center;gap:9px}
+.icon-btn{
+  width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+  background:var(--surface);border:1px solid var(--stroke);
+  transition:.35s cubic-bezier(.2,.9,.3,1.4);font-size:1.02rem;
+}
+.icon-btn:hover{background:var(--surface-2);transform:translateY(-3px) scale(1.05);
+  border-color:var(--p1);box-shadow:0 10px 26px -10px var(--p1)}
+.theme-btn .sun{display:none}
+html[data-theme="light"] .theme-btn .sun{display:block}
+html[data-theme="light"] .theme-btn .moon{display:none}
+
+.burger{display:none;flex-direction:column;gap:5px;width:44px;height:44px;
+  align-items:center;justify-content:center;border-radius:14px;
+  background:var(--surface);border:1px solid var(--stroke)}
+.burger span{display:block;width:18px;height:2px;background:var(--text);border-radius:2px;transition:.35s}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0;transform:scaleX(.2)}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ═══════════════════════ دکمهها ═══════════════════════ */
+.btn{
+  position:relative;display:inline-flex;align-items:center;gap:10px;
+  padding:15px 32px;border-radius:16px;font-weight:800;font-size:.92rem;
+  transition:transform .4s cubic-bezier(.2,.9,.3,1.5),box-shadow .4s,background .4s;
+  will-change:transform;overflow:hidden;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--p1),var(--p2));
+  color:#fff;
+  box-shadow:0 14px 36px -12px color-mix(in srgb,var(--p1) 85%,transparent),
+             0 0 0 1px color-mix(in srgb,var(--p1) 30%,transparent) inset;
+}
+.btn-primary::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.45),transparent 70%);
+  transform:translateX(-140%);transition:transform .8s cubic-bezier(.2,.8,.2,1);
+}
+.btn-primary:hover::after{transform:translateX(140%)}
+.btn-primary:hover{
+  box-shadow:0 24px 60px -16px color-mix(in srgb,var(--p1) 95%,transparent);
+}
+.btn-ghost{
+  background:var(--surface);border:1px solid var(--stroke);color:var(--text);
+}
+.btn-ghost:hover{background:var(--surface-2);border-color:var(--p1);
+  box-shadow:0 18px 44px -18px var(--p1)}
+.btn svg{width:17px;height:17px;flex-shrink:0}
+
+/* ═══════════════════════ محتوای اصلی ═══════════════════════ */
+main,footer{position:relative;z-index:2}
+
+/* ═══════════════════════ هیرو ═══════════════════════ */
+.hero{
+  min-height:100vh;display:grid;place-items:center;text-align:center;
+  padding:140px 24px 100px;position:relative;
+}
+.hero-inner{max-width:880px;will-change:transform,opacity}
+.badge{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:9px 20px;border-radius:100px;margin-bottom:32px;
+  background:var(--surface);border:1px solid var(--stroke);
+  font-size:.78rem;color:var(--muted);font-weight:600;
+  backdrop-filter:blur(10px);
+  box-shadow:var(--shadow-sm);
+}
+.badge .dot{
+  width:8px;height:8px;border-radius:50%;background:#25d366;
+  box-shadow:0 0 0 0 rgba(37,211,102,.7);animation:pulse 2.2s infinite;
+}
+@keyframes pulse{
+  70%{box-shadow:0 0 0 12px rgba(37,211,102,0)}
+  100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}
+}
+.hero-title{
+ font-size: clamp(2.1rem, 7vw, 4.6rem);
+  font-weight: 900;
+  line-height: 1.3;
+  letter-spacing: 0px; /* دقت کن: برای فارسی ممکنه نیاز باشه این رو 0 کنی */
+  perspective: 800px;
+  direction: ltr;        /* <--- این رو حتماً اضافه کن */
+  text-align: center;  }
+.hero-title .ch{
+  display:inline-block;opacity:0;will-change:transform,opacity;
+  transform-origin:50% 100%;
+}
+.ready .hero-title .ch{
+  animation:chIn 1s cubic-bezier(.2,.85,.25,1.1) forwards;
+  animation-delay:calc(.35s + var(--i) * .05s);
+}
+@keyframes chIn{
+  from{opacity:0;transform:translateY(.55em) rotateX(-85deg) scale(.9);filter:blur(6px)}
+  to{opacity:1;transform:none;filter:blur(0)}
+}
+.gradient{
+  background:linear-gradient(115deg,var(--p1),var(--p2) 42%,var(--p3) 78%,var(--p1));
+  background-size:280% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shift 9s linear infinite;
+}
+@keyframes shift{to{background-position:280% center}}
+
+.typed-line{
+  margin-top:24px;font-size:clamp(1rem,2.4vw,1.32rem);
+  color:var(--muted);font-weight:600;min-height:2.2em;
+}
+.typed{color:var(--p2);font-weight:900;
+  text-shadow:0 0 30px color-mix(in srgb,var(--p2) 55%,transparent)}
+.caret{
+  display:inline-block;width:2px;height:1.05em;margin-right:5px;
+  background:var(--p2);vertical-align:-.16em;
+  box-shadow:0 0 12px var(--p2);
+  animation:blink 1s step-end infinite;
+}
+@keyframes blink{50%{opacity:0}}
+.hero-desc{
+  margin:26px auto 0;max-width:640px;color:var(--muted);
+  font-size:clamp(.9rem,1.6vw,1.02rem);
+}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:40px}
+
+.hero-stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:66px}
+.stat{
+  position:relative;padding:22px 32px;border-radius:20px;
+  background:var(--surface);border:1px solid var(--stroke);
+  min-width:132px;overflow:hidden;
+  transition:transform .4s cubic-bezier(.2,.9,.3,1.4),border-color .4s,box-shadow .4s;
+  backdrop-filter:blur(10px);
+}
+.stat::before{
+  content:"";position:absolute;inset:0;opacity:0;transition:opacity .4s;
+  background:radial-gradient(circle at 50% 0%,color-mix(in srgb,var(--p1) 26%,transparent),transparent 70%);
+}
+.stat:hover{transform:translateY(-8px);border-color:color-mix(in srgb,var(--p1) 55%,transparent);
+  box-shadow:0 24px 54px -22px var(--p1)}
+.stat:hover::before{opacity:1}
+.stat b{position:relative;display:block;font-size:1.8rem;font-weight:900;line-height:1.3;
+  background:linear-gradient(135deg,var(--p1),var(--p2));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{position:relative;font-size:.76rem;color:var(--muted)}
+
+.scroll-cue{
+  position:absolute;bottom:30px;right:50%;transform:translateX(50%);
+  display:grid;place-items:center;gap:9px;color:var(--muted);
+  font-size:.7rem;letter-spacing:1px;font-weight:600;
+  animation:bob 2.6s ease-in-out infinite;
+}
+.scroll-cue .mouse{
+  width:25px;height:40px;border-radius:14px;border:2px solid var(--muted);
+  display:grid;justify-items:center;padding-top:7px;
+}
+.scroll-cue .mouse i{width:3px;height:8px;border-radius:2px;background:var(--muted);
+  animation:wheel 1.7s ease-in-out infinite}
+@keyframes wheel{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(10px);opacity:.2}}
+@keyframes bob{0%,100%{transform:translateX(50%) translateY(0)}50%{transform:translateX(50%) translateY(-9px)}}
+
+/* ═══════════════════════ مارکی ═══════════════════════ */
+.marquee{
+  position:relative;z-index:2;
+  padding:26px 0;overflow:hidden;
+  border-top:1px solid var(--stroke);border-bottom:1px solid var(--stroke);
+  background:color-mix(in srgb,var(--bg-2) 70%,transparent);
+  backdrop-filter:blur(10px);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+}
+.marquee-inner{display:flex;width:max-content;will-change:transform;direction:ltr}
+.marquee-seq{display:flex;align-items:center;flex-shrink:0}
+.marquee-seq span{
+  display:inline-flex;align-items:center;gap:22px;padding:0 22px;
+  font-size:clamp(1rem,2vw,1.4rem);font-weight:900;
+  color:transparent;-webkit-text-stroke:1px color-mix(in srgb,var(--text) 42%,transparent);
+  white-space:nowrap;letter-spacing:.5px;
+}
+.marquee-seq span::after{
+  content:"✦";-webkit-text-stroke:0;font-size:.7em;
+  color:var(--p1);text-shadow:0 0 16px var(--p1);
+}
+
+/* ═══════════════════════ سکشن عمومی ═══════════════════════ */
+section{padding:120px 24px;position:relative;scroll-margin-top:100px}
+.wrap{max-width:1180px;margin:0 auto}
+.sec-head{text-align:center;margin-bottom:70px}
+.kicker{
+  display:inline-block;padding:7px 18px;border-radius:100px;margin-bottom:18px;
+  font-size:.72rem;font-weight:800;letter-spacing:1.6px;
+  color:var(--p2);
+  background:color-mix(in srgb,var(--p2) 12%,transparent);
+  border:1px solid color-mix(in srgb,var(--p2) 30%,transparent);
+  box-shadow:0 0 34px -12px color-mix(in srgb,var(--p2) 90%,transparent);
+}
+.sec-title{font-size:clamp(1.7rem,4.2vw,2.8rem);font-weight:900;line-height:1.35}
+.sec-sub{color:var(--muted);margin-top:16px;font-size:.95rem;max-width:580px;margin-inline:auto}
+
+/* ═══════════════════════ Reveal ═══════════════════════ */
+[data-reveal]{
+  opacity:0;transform:translateY(46px);
+  transition:opacity 1s cubic-bezier(.2,.8,.2,1),transform 1s cubic-bezier(.2,.8,.2,1);
+  transition-delay:var(--d,0s);
+  will-change:transform,opacity;
+}
+[data-reveal="scale"]{transform:translateY(30px) scale(.94)}
+[data-reveal="right"]{transform:translateX(60px)}
+[data-reveal="left"]{transform:translateX(-60px)}
+[data-reveal].in{opacity:1;transform:none}
+
+/* ═══════════════════════ درباره من ═══════════════════════ */
+.about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:center}
+.visual{position:relative;display:grid;place-items:center;min-height:380px}
+.visual-card{
+  width:min(330px,72vw);aspect-ratio:1;border-radius:36px;
+  background:
+    radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--p1) 40%,transparent),transparent 60%),
+    radial-gradient(circle at 75% 80%,color-mix(in srgb,var(--p2) 34%,transparent),transparent 60%),
+    var(--surface);
+  border:1px solid var(--stroke-2);
+  display:grid;place-items:center;font-size:6rem;
+  box-shadow:var(--shadow-lg),0 0 80px -30px var(--p1) inset;
+  position:relative;z-index:2;
+  transition:transform .6s cubic-bezier(.2,.9,.3,1.2);
+  will-change:transform;
+}
+.visual-card span{filter:drop-shadow(0 16px 30px rgba(0,0,0,.45));
+  transition:transform .6s cubic-bezier(.2,.9,.3,1.6)}
+.visual-card:hover span{transform:scale(1.12) rotate(-6deg)}
+.ring{
+  position:absolute;border-radius:50%;border:1px dashed var(--stroke-2);
+  animation:spin 30s linear infinite;
+}
+.ring.r1{width:100%;aspect-ratio:1;max-width:420px}
+.ring.r2{width:120%;aspect-ratio:1;max-width:500px;animation-duration:46s;animation-direction:reverse;
+  border-style:solid;border-color:color-mix(in srgb,var(--p1) 22%,transparent)}
+.ring::before{
+  content:"";position:absolute;top:-6px;right:50%;width:12px;height:12px;border-radius:50%;
+  background:var(--p2);box-shadow:0 0 20px 2px var(--p2);
+}
+.ring.r2::before{background:var(--p3);box-shadow:0 0 20px 2px var(--p3);width:9px;height:9px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.about-text h3{font-size:1.55rem;font-weight:900;margin-bottom:18px;line-height:1.6}
+.about-text p{color:var(--muted);margin-bottom:16px;font-size:.96rem}
+.about-text strong{color:var(--text);font-weight:800;position:relative;white-space:nowrap}
+.about-text strong::after{
+  content:"";position:absolute;right:0;left:0;bottom:2px;height:7px;border-radius:4px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--p1) 55%,transparent),
+             color-mix(in srgb,var(--p2) 45%,transparent));
+  opacity:.35;z-index:-1;
+}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.chip{
+  padding:9px 17px;border-radius:100px;font-size:.8rem;font-weight:700;
+  background:var(--surface);border:1px solid var(--stroke);
+  transition:.35s cubic-bezier(.2,.9,.3,1.4);
+}
+.chip:hover{transform:translateY(-4px) scale(1.04);border-color:var(--p2);color:var(--p2);
+  box-shadow:0 14px 30px -14px var(--p2)}
+
+/* ═══════════════════════ مهارتها ═══════════════════════ */
+.skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.skill{
+  position:relative;padding:24px 26px;border-radius:20px;
+  background:var(--surface);border:1px solid var(--stroke);
+  overflow:hidden;backdrop-filter:blur(10px);
+  transition:transform .4s cubic-bezier(.2,.9,.3,1.4),border-color .4s,box-shadow .4s;
+}
+.skill::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(340px circle at var(--px,50%) var(--py,50%),
+             color-mix(in srgb,var(--p1) 22%,transparent),transparent 65%);
+  opacity:0;transition:opacity .4s ease;
+}
+.skill:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--p1) 50%,transparent);
+  box-shadow:0 26px 54px -26px var(--p1)}
+.skill:hover::before{opacity:1}
+.skill-top{position:relative;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.skill-top span:first-child{font-weight:700;font-size:.93rem}
+.lvl{font-size:.82rem;font-weight:900;color:var(--p2);
+  text-shadow:0 0 18px color-mix(in srgb,var(--p2) 60%,transparent)}
+.bar{position:relative;height:8px;border-radius:100px;background:var(--stroke);overflow:hidden}
+.bar i{
+  display:block;height:100%;width:0;border-radius:100px;
+  background:linear-gradient(90deg,var(--p1),var(--p2));
+  box-shadow:0 0 18px color-mix(in srgb,var(--p1) 90%,transparent);
+  transition:width 1.6s cubic-bezier(.2,.85,.25,1.05);
+}
+.skill.in .bar i{width:var(--w)}
+
+/* ═══════════════════════ نمونهکارها (پین افقی) ═══════════════════════ */
+.works{padding:0;position:relative}
+.pin{
+  position:sticky;top:0;height:100vh;
+  display:flex;flex-direction:column;justify-content:center;gap:30px;
+  overflow:hidden;
+}
+.pin-head{max-width:1180px;margin:0 auto;padding:0 26px;width:100%}
+.track{
+  display:flex;gap:28px;width:max-content;
+  padding-inline:8vw;will-change:transform;
+}
+.work{
+  position:relative;width:min(400px,78vw);flex-shrink:0;
+  border-radius:var(--r);background:var(--surface);
+  border:1px solid var(--stroke);overflow:hidden;
+  backdrop-filter:blur(12px);
+  transform-style:preserve-3d;
+  transition:border-color .4s ease,box-shadow .5s ease;
+  will-change:transform;
+}
+.work:hover{border-color:color-mix(in srgb,var(--p1) 55%,transparent);
+  box-shadow:0 40px 80px -30px color-mix(in srgb,var(--p1) 75%,transparent)}
+.work .glare{
+  position:absolute;inset:0;pointer-events:none;z-index:5;opacity:0;
+  transition:opacity .35s ease;
+  background:radial-gradient(420px circle at var(--gx,50%) var(--gy,50%),
+             rgba(255,255,255,.18),transparent 55%);
+}
+.work:hover .glare{opacity:1}
+.thumb{
+  height:190px;position:relative;display:grid;place-items:center;overflow:hidden;
+  background:linear-gradient(140deg,var(--g1),var(--g2));
+}
+.thumb::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 22% 18%,rgba(255,255,255,.4),transparent 46%),
+    radial-gradient(circle at 82% 88%,rgba(0,0,0,.32),transparent 56%);
+}
+.thumb::after{
+  content:"";position:absolute;inset:-50%;
+  background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.22),transparent 35%);
+  animation:spin 9s linear infinite;opacity:.8;
+}
+.thumb .glyph{
+  position:relative;z-index:3;font-size:3.4rem;
+  filter:drop-shadow(0 10px 22px rgba(0,0,0,.45));
+  transition:transform .55s cubic-bezier(.2,.9,.3,1.6);
+}
+.work:hover .thumb .glyph{transform:scale(1.3) rotate(-10deg)}
+.work-num{
+  position:absolute;top:14px;right:16px;z-index:4;
+  font-size:.72rem;font-weight:900;letter-spacing:1px;
+  color:rgba(255,255,255,.9);
+  background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.22);
+  padding:4px 11px;border-radius:100px;backdrop-filter:blur(8px);
+}
+.work-body{padding:24px 26px 28px}
+.work-body h3{font-size:1.05rem;font-weight:900;margin-bottom:9px}
+.work-body p{font-size:.85rem;color:var(--muted);margin-bottom:18px;line-height:1.85}
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tags span{
+  font-size:.7rem;padding:5px 12px;border-radius:9px;font-weight:700;
+  background:color-mix(in srgb,var(--p1) 16%,transparent);
+  color:color-mix(in srgb,var(--p1) 70%,var(--text));
+  border:1px solid color-mix(in srgb,var(--p1) 28%,transparent);
+}
+.pin-hint{
+  max-width:1180px;margin:0 auto;padding:0 26px;width:100%;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:.76rem;color:var(--muted);font-weight:600;
+}
+.pin-hint .line{flex:1;height:1px;background:var(--stroke);margin-inline:18px;position:relative}
+.pin-hint .line i{
+  position:absolute;top:-1px;right:0;height:3px;width:0;border-radius:3px;
+  background:linear-gradient(90deg,var(--p1),var(--p2));
+  box-shadow:0 0 14px var(--p1);
+}
+
+/* ═══════════════════════ مسیر ═══════════════════════ */
+.timeline{position:relative;max-width:760px;margin:0 auto;padding-right:56px;
+  --tlp:0}
+.timeline::before{
+  content:"";position:absolute;top:8px;right:17px;width:2px;
+  height:calc(var(--tlp) * (100% - 16px));
+  background:linear-gradient(180deg,var(--p1),var(--p2));
+  box-shadow:0 0 18px color-mix(in srgb,var(--p1) 75%,transparent);
+  transition:height .12s linear;
+}
+.timeline::after{
+  content:"";position:absolute;right:13px;top:8px;width:10px;height:10px;border-radius:50%;
+  background:var(--p2);box-shadow:0 0 22px 3px var(--p2);
+  transform:translateY(calc(var(--tlp) * (100% - 16px)));
+  transition:transform .12s linear;
+}
+.timeline .rail{
+  position:absolute;top:8px;right:17px;bottom:8px;width:2px;background:var(--stroke);
+}
+.tl-item{position:relative;margin-bottom:46px;padding-bottom:4px}
+.tl-item:last-child{margin-bottom:0}
+.tl-item::before{
+  content:"";position:absolute;right:-46px;top:9px;width:14px;height:14px;
+  border-radius:50%;background:var(--bg);border:3px solid var(--stroke-2);
+  transition:.45s ease;z-index:2;
+}
+.tl-item.lit::before{
+  border-color:var(--p2);background:var(--bg);
+  box-shadow:0 0 0 6px color-mix(in srgb,var(--p2) 16%,transparent),
+             0 0 24px 2px var(--p2);
+}
+.tl-year{
+  display:inline-block;font-size:.74rem;font-weight:900;letter-spacing:1.6px;
+  color:var(--p2);margin-bottom:8px;
+}
+.tl-item h4{font-size:1.04rem;font-weight:900;margin-bottom:7px}
+.tl-item p{font-size:.89rem;color:var(--muted)}
+
+/* ═══════════════════════ تماس ═══════════════════════ */
+.contact-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:start}
+.card{
+  position:relative;padding:36px;border-radius:var(--r);
+  background:var(--surface);border:1px solid var(--stroke);
+  backdrop-filter:blur(14px);overflow:hidden;
+  box-shadow:var(--shadow-sm);
+}
+.card.glow::before{
+  content:"";position:absolute;inset:-1px;border-radius:inherit;z-index:-1;
+  background:conic-gradient(from var(--a,0deg),transparent 0%,var(--p1) 18%,transparent 36%,
+             transparent 64%,var(--p2) 82%,transparent 100%);
+  filter:blur(14px);opacity:.5;animation:rotateGlow 9s linear infinite;
+}
+@keyframes rotateGlow{to{transform:rotate(360deg)}}
+.card h3{font-size:1.28rem;font-weight:900;margin-bottom:10px}
+.card > p{color:var(--muted);font-size:.88rem;margin-bottom:28px}
+.contact-item{display:flex;align-items:center;gap:15px;margin-bottom:18px;font-size:.9rem}
+.contact-item .ci{
+  width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--p1) 22%,transparent),
+             color-mix(in srgb,var(--p2) 22%,transparent));
+  border:1px solid var(--stroke);font-size:1.08rem;flex-shrink:0;
+  transition:.4s cubic-bezier(.2,.9,.3,1.4);
+}
+.contact-item:hover .ci{transform:rotate(-8deg) scale(1.1);
+  box-shadow:0 12px 30px -12px var(--p1)}
+.contact-item small{display:block;color:var(--muted);font-size:.72rem;line-height:1.6}
+.contact-item b{font-weight:700;font-size:.9rem}
+
+form{display:grid;gap:16px}
+.field{position:relative}
+.field label{
+  position:absolute;top:15px;right:17px;font-size:.87rem;color:var(--muted);
+  pointer-events:none;transition:.28s cubic-bezier(.2,.9,.3,1.3);
+}
+.field input,.field textarea{
+  width:100%;padding:16px 17px;border-radius:15px;font-family:inherit;
+  font-size:.9rem;color:var(--text);background:var(--surface);
+  border:1px solid var(--stroke);outline:none;
+  transition:border-color .3s,box-shadow .3s,background .3s;resize:vertical;
+}
+.field textarea{min-height:132px}
+.field input:focus,.field textarea:focus{
+  border-color:var(--p1);background:var(--surface-2);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--p1) 18%,transparent),
+             0 12px 34px -20px var(--p1);
+}
+.field input:focus+label,.field input:not(:placeholder-shown)+label,
+.field textarea:focus+label,.field textarea:not(:placeholder-shown)+label{
+  top:-9px;right:13px;font-size:.69rem;color:var(--p2);font-weight:700;
+  background:var(--bg-2);padding:0 8px;border-radius:7px;
+}
+.field input::placeholder,.field textarea::placeholder{color:transparent}
+.submit-btn{justify-content:center;width:100%;margin-top:6px}
+
+/* ═══════════════════════ فوتر ═══════════════════════ */
+footer{
+  padding:56px 26px 40px;text-align:center;
+  border-top:1px solid var(--stroke);
+  background:color-mix(in srgb,var(--bg-2) 60%,transparent);
+  backdrop-filter:blur(10px);
+}
+.footer-name{font-weight:900;font-size:1.1rem;margin-bottom:8px}
+.footer-note{font-size:.78rem;color:var(--muted)}
+.footer-note b{color:var(--p2)}
+.socials{display:flex;justify-content:center;gap:12px;margin:24px 0}
+.socials a{
+  width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+  background:var(--surface);border:1px solid var(--stroke);
+  transition:.4s cubic-bezier(.2,.9,.3,1.5);
+}
+.socials a:hover{transform:translateY(-7px) rotate(-8deg) scale(1.08);
+  border-color:var(--p1);background:var(--surface-2);
+  box-shadow:0 16px 36px -14px var(--p1)}
+
+/* ═══════════════════════ بازگشت به بالا ═══════════════════════ */
+#toTop{
+  position:fixed;left:24px;bottom:24px;z-index:800;
+  width:50px;height:50px;border-radius:16px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;
+  box-shadow:0 16px 40px -12px color-mix(in srgb,var(--p1) 90%,transparent);
+  opacity:0;visibility:hidden;transform:translateY(20px) scale(.8);
+  transition:.45s cubic-bezier(.2,.9,.3,1.5);
+}
+#toTop.show{opacity:1;visibility:visible;transform:none}
+#toTop:hover{transform:translateY(-5px) scale(1.08)}
+
+/* ═══════════════════════ Toast ═══════════════════════ */
+#toast{
+  position:fixed;bottom:28px;right:50%;transform:translate(50%,150%) scale(.9);
+  z-index:1200;padding:15px 28px;border-radius:15px;
+  background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;
+  font-weight:800;font-size:.86rem;white-space:nowrap;
+  box-shadow:0 22px 56px -14px color-mix(in srgb,var(--p1) 90%,transparent);
+  transition:transform .5s cubic-bezier(.2,.9,.3,1.5);
+}
+#toast.show{transform:translate(50%,0) scale(1)}
+
+/* ═══════════════════════ ریسپانسیو ═══════════════════════ */
+@media(max-width:960px){
+  .about-grid,.contact-grid{grid-template-columns:1fr;gap:48px}
+  .about-text{text-align:center}
+  .chips{justify-content:center}
+  .visual{min-height:320px}
+  .skills-grid{grid-template-columns:1fr}
+}
+@media(max-width:820px){
+  .nav-links{
+    position:fixed;top:0;right:0;bottom:0;width:min(80vw,310px);
+    flex-direction:column;align-items:flex-start;gap:6px;
+    padding:100px 22px 30px;
+    background:color-mix(in srgb,var(--bg) 96%,transparent);
+    backdrop-filter:blur(24px);border-left:1px solid var(--stroke);
+    transform:translateX(105%);
+    transition:transform .5s cubic-bezier(.2,.9,.3,1.1);
+    box-shadow:-30px 0 70px rgba(0,0,0,.4);
+  }
+  .nav-links.open{transform:none}
+  .nav-links a{width:100%;font-size:1rem;padding:14px 16px}
+  .nav-links a.active::after{display:none}
+  .nav-links a.active{background:var(--surface);color:var(--p2)}
+  .burger{display:flex}
+  section{padding:90px 20px}
+  .hero{padding-top:120px}
+  .stat{padding:16px 22px;min-width:112px}
+  .stat b{font-size:1.45rem}
+  .hero-stats{gap:10px;margin-top:46px}
+  #toTop{left:16px;bottom:16px;width:46px;height:46px}
+  /* پین در موبایل غیرفعال */
+  .works{height:auto!important}
+  .pin{position:static;height:auto;padding:0 0 20px;gap:34px}
+  .track{
+    width:auto;flex-direction:column;transform:none!important;
+    padding-inline:20px;gap:22px;align-items:center;
+  }
+  .work{width:min(440px,100%)}
+  .pin-hint{display:none}
+  .badge{font-size:.72rem;padding:8px 15px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important}
+  html{scroll-behavior:auto}
+  .grain{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ پیشبارگذار ═══════ -->
+<div id="preloader">
+  <div class="pl-inner">
+    <div class="pl-name">امیرحسین سبحانی کیا</div>
+    <div class="pl-bar"><i id="plBar"></i></div>
+    <div class="pl-count"><span id="plNum">۰</span> ٪</div>
+  </div>
+</div>
+
+<!-- ═══════ لایههای پسزمینه ═══════ -->
+<canvas id="bg"></canvas>
+<div class="spotlight" id="spotlight"></div>
+<div class="blobs">
+  <span class="b1" data-mx="0.045" data-my="0.035"></span>
+  <span class="b2" data-mx="-0.06" data-my="0.05"></span>
+  <span class="b3" data-mx="0.08" data-my="-0.06"></span>
+</div>
+
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<!-- ═══════ کرسر سفارشی ═══════ -->
+<div class="cursor" id="cursor">
+  <div class="c-ring"><span class="c-label" id="cLabel"></span></div>
+  <div class="c-dot"></div>
+</div>
+
+<!-- ═══════ نوار پیشرفت ═══════ -->
+<div class="progress"><i id="progressBar"></i></div>
+
+<!-- ═══════ ناوبری ═══════ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#home" class="logo" data-cursor>
+      <span class="logo-mark">ا</span>
+      <span>امیرحسین سبحانی کیا<small>ANIMATOR · DEVELOPER</small></span>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="active">خانه</a></li>
+      <li><a href="#about">درباره من</a></li>
+      <li><a href="#skills">مهارتها</a></li>
+      <li><a href="#works">نمونهکارها</a></li>
+      <li><a href="#journey">مسیر من</a></li>
+      <li><a href="#contact">تماس</a></li>
+    </ul>
+
+    <div class="nav-tools">
+      <button class="icon-btn theme-btn" id="themeBtn" aria-label="تغییر تم">
+        <span class="moon">🌙</span><span class="sun">☀️</span>
+      </button>
+      <button class="burger" id="burger" aria-label="منو">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══════════════ هیرو ═══════════════ -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="badge"><span class="dot"></span> آماده همکاری در پروژه های جدید</div>
+
+    <h1 class="hero-title" id="heroTitle">
+      <span class="gradient">Amirhosein Sobhani Kia</span>
+    </h1>
+
+    <p class="typed-line">من <span class="typed" id="typed"></span><span class="caret"></span></p>
+
+    <p class="hero-desc">
+      انیمیشن ساز، برنامه نویس و دانش آموز مدرسه شهید بهشتی نیشابور.
+      داستانها را با حرکت تصویر زنده میکنم و ایده ها را با کد به واقعیت تبدیل میکنم.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#works" class="btn btn-primary magnet" data-cursor>
+        مشاهده نمونه کارها
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </a>
+      <a href="#contact" class="btn btn-ghost magnet" data-cursor>تماس با من</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat" data-reveal style="--d:.1s"><b data-count="3">۰</b><span>سال تجربه</span></div>
+      <div class="stat" data-reveal style="--d:.2s"><b data-count="25">۰</b><span>پروژه انجامشده</span></div>
+      <div class="stat" data-reveal style="--d:.3s"><b data-count="7">۰</b><span>ابزار حرفهای</span></div>
+    </div>
+  </div>
+
+  <a href="#about" class="scroll-cue" data-cursor>
+    <span class="mouse"><i></i></span>
+    اسکرول کن
+  </a>
+</section>
+
+<!-- ═══════════════ مارکی ═══════════════ -->
+<div class="marquee">
+  <div class="marquee-inner" id="marquee">
+    <div class="marquee-seq">
+      <span>ANIMATION</span><span>DEVELOPMENT</span><span>MOTION DESIGN</span>
+      <span>UI / UX</span><span>STORYBOARD</span><span>CHARACTER RIG</span>
+    </div>
+    <div class="marquee-seq" aria-hidden="true">
+      <span>ANIMATION</span><span>DEVELOPMENT</span><span>MOTION DESIGN</span>
+      <span>UI / UX</span><span>STORYBOARD</span><span>CHARACTER RIG</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ درباره من ═══════════════ -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker" data-reveal>درباره من</span>
+      <h2 class="sec-title" data-reveal style="--d:.08s">یه نوجوان با دو تا عشق بزرگ</h2>
+      <p class="sec-sub" data-reveal style="--d:.16s">انیمیشن و کد — جایی که هنر و منطق به هم میرسند.</p>
+    </div>
+
+    <div class="about-grid">
+      <div class="visual" data-reveal="scale">
+        <div class="ring r1"></div>
+        <div class="ring r2"></div>
+        <div class="visual-card" id="visualCard"><span>🎬</span></div>
+      </div>
+
+      <div class="about-text">
+        <h3 data-reveal>سلام! من امیرحسین هستم 👋</h3>
+        <p data-reveal style="--d:.08s">
+          از بچگی وقتی انیمیشن میدیدم، بیشتر از خودِ داستان به این فکر میکردم
+          که «این حرکتها چطور ساخته میشن؟» کمکم همین کنجکاوی منو به دنیای
+          <strong>انیمیشن سازی</strong> کشوند.
+        </p>
+        <p data-reveal style="--d:.16s">
+          بعد از اون، یاد گرفتم که میتونم چیزهایی که توی ذهنم حرکت میکنن رو
+          با <strong>برنامه نویسی</strong> واقعاً به حرکت دربیارم. حالا هم روی
+          انیمیشن های کوتاه کار میکنم و هم سایت و اپلیکیشن میسازم.
+        </p>
+        <p data-reveal style="--d:.24s">
+          دانش آموز <strong>مدرسه شهید بهشتی نیشابور</strong> هستم و هر روز
+          بین درس ها، وقت میذارم برای یادگیری ابزارها و تکنیکهای جدید.
+        </p>
+
+        <div class="chips" data-reveal style="--d:.32s">
+          <span class="chip">🎨 طراحی کاراکتر</span>
+          <span class="chip">🎞 موشن گرافیک</span>
+          <span class="chip">💻 توسعه وب</span>
+          <span class="chip">🧠 حل مسئله</span>
+          <span class="chip">🎧 تدوین و صداگذاری</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ مهارتها ═══════════════ -->
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker" data-reveal>مهارتها</span>
+      <h2 class="sec-title" data-reveal style="--d:.08s">با چه ابزارهایی کار میکنم</h2>
+      <p class="sec-sub" data-reveal style="--d:.16s">از قلم دیجیتال تا خط فرمان — این جعبهابزار منه.</p>
+    </div>
+
+    <div class="skills-grid" id="skillsGrid">
+      <div class="skill" data-val="92" data-reveal><div class="skill-top"><span>Adobe After Effects</span><span class="lvl">۰٪</span></div><div class="bar"><i style="--w:92%"></i></div></div>
+      <div class="skill" data-val="88" data-reveal style="--d:.06s"><div class="skill-top"><span>Moho (انیمیشن دو بعدی)</span><span class="lvl">۰٪</span></div><div class="bar"><i style="--w:88%"></i></div></div>
+      <div class="skill" data-val="85" data-reveal style="--d:.12s"><div class="skill-top"><span>HTML / CSS / JavaScript</span><span class="lvl">۰٪</span></div><div class="bar"><i style="--w:85%"></i></div></div>
+      <div class="skill" data-val="80" data-reveal style="--d:.18s"><div class="skill-top"><span>Adobe Photoshop</span><span class="lvl">۰٪</span></div><div class="bar"><i style="--w:80%"></i></div></div>
+      <div class="skill" data-val="68" data-reveal style="--d:.24s"><div class="skill-top"><span>Blender (سه بعدی)</span><span class="lvl">۰٪</span></div><div class="bar"><i style="--w:68%"></i></div></div>
+      <div class="skill" data-val="72" data-reveal style="--d:.3s"><div class="skill-top"><span>Python</span><span class="lvl">۰٪</span></div><div class="bar"><i style="--w:72%"></i></div></div>
+      <div class="skill" data-val="83" data-reveal style="--d:.36s"><div class="skill-top"><span>Figma / طراحی رابط کاربری</span><span class="lvl">۰٪</span></div><div class="bar"><i style="--w:83%"></i></div></div>
+      <div class="skill" data-val="76" data-reveal style="--d:.42s"><div class="skill-top"><span>Premiere Pro (تدوین)</span><span class="lvl">۰٪</span></div><div class="bar"><i style="--w:76%"></i></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ نمونهکارها (پین افقی) ═══════════════ -->
+<section id="works" class="works">
+  <div class="pin" id="pin">
+    <div class="pin-head">
+      <span class="kicker">نمونهکارها</span>
+      <h2 class="sec-title" style="margin-top:6px">چیزهایی که ساختم</h2>
+      <p class="sec-sub" style="margin-inline:0">اسکرول کن تا افقی حرکت کنیم →</p>
+    </div>
+
+    <div class="track" id="track">
+      <article class="work" data-tilt data-cursor-label="مشاهده">
+        <div class="glare"></div>
+        <div class="thumb" style="--g1:#8b5cff;--g2:#5b8bff">
+          <span class="work-num">۰۱</span><span class="glyph">🎞</span>
+        </div>
+        <div class="work-body">
+          <h3>تیزر انیمیشن «کوچ»</h3>
+          <p>انیمیشن کوتاه دو بعدی دربارهی مهاجرت پرندهها، با موشنگرافیک دستی.</p>
+          <div class="tags"><span>After Effects</span><span>Moho</span><span>Storyboard</span></div>
+        </div>
+      </article>
+
+      <article class="work" data-tilt data-cursor-label="مشاهده">
+        <div class="glare"></div>
+        <div class="thumb" style="--g1:#22d3ee;--g2:#3ecf8e">
+          <span class="work-num">۰۲</span><span class="glyph">💻</span>
+        </div>
+        <div class="work-body">
+          <h3>سایت فروشگاه کوچک</h3>
+          <p>یک فروشگاه اینترنتی سبک با فیلتر محصولات، سبد خرید و طراحی ریسپانسیو.</p>
+          <div class="tags"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+        </div>
+      </article>
+
+      <article class="work" data-tilt data-cursor-label="مشاهده">
+        <div class="glare"></div>
+        <div class="thumb" style="--g1:#ff4d8d;--g2:#ff9d5c">
+          <span class="work-num">۰۳</span><span class="glyph">🎮</span>
+        </div>
+        <div class="work-body">
+          <h3>بازی مرورگری «سیاره»</h3>
+          <p>بازی کوچک با Canvas؛ کنترل سفینه، سیستم امتیاز و افکتهای ذرهای.</p>
+          <div class="tags"><span>Canvas</span><span>Game Loop</span></div>
+        </div>
+      </article>
+
+      <article class="work" data-tilt data-cursor-label="مشاهده">
+        <div class="glare"></div>
+        <div class="thumb" style="--g1:#9b6bff;--g2:#22d3ee">
+          <span class="work-num">۰۴</span><span class="glyph">🎨</span>
+        </div>
+        <div class="work-body">
+          <h3>پکیج کاراکتر دیجیتال</h3>
+          <p>طراحی و ریگینگ چند کاراکتر برای پروژههای آموزشی و محتوای شبکههای اجتماعی.</p>
+          <div class="tags"><span>Photoshop</span><span>Rigging</span><span>Character Design</span></div>
+        </div>
+      </article>
+
+      <article class="work" data-tilt data-cursor-label="مشاهده">
+        <div class="glare"></div>
+        <div class="thumb" style="--g1:#5b8bff;--g2:#8b5cff">
+          <span class="work-num">۰۵</span><span class="glyph">🧩</span>
+        </div>
+        <div class="work-body">
+          <h3>داشبورد مدیریت کارها</h3>
+          <p>ابزار مدیریت تسک با ذخیرهسازی محلی، فیلتر پویا و انیمیشنهای تعاملی.</p>
+          <div class="tags"><span>JavaScript</span><span>LocalStorage</span><span>UI</span></div>
+        </div>
+      </article>
+
+      <article class="work" data-tilt data-cursor-label="مشاهده">
+        <div class="glare"></div>
+        <div class="thumb" style="--g1:#3ecf8e;--g2:#22d3ee">
+          <span class="work-num">۰۶</span><span class="glyph">🤖</span>
+        </div>
+        <div class="work-body">
+          <h3>بات یادآور تکالیف</h3>
+          <p>اسکریپت پایتونی که تکالیف مدرسه را زمانبندی و بهصورت خودکار یادآوری میکند.</p>
+          <div class="tags"><span>Python</span><span>Automation</span></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="pin-hint">
+      <span>۰۱</span>
+      <span class="line"><i id="pinBar"></i></span>
+      <span>۰۶</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ مسیر من ═══════════════ -->
+<section id="journey">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker" data-reveal>مسیر من</span>
+      <h2 class="sec-title" data-reveal style="--d:.08s">اینجا چطور رسیدم</h2>
+      <p class="sec-sub" data-reveal style="--d:.16s">ایستگاههای مهم مسیر یادگیری.</p>
+    </div>
+
+    <div class="timeline" id="timeline">
+      <span class="rail"></span>
+
+      <div class="tl-item">
+        <span class="tl-year">۱۳۹۸</span>
+        <h4>اولین خط کد</h4>
+        <p>با HTML و CSS شروع کردم و اولین صفحه شخصیام را ساختم — خیلی ساده، ولی شروع همهچیز بود.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-year">۱۴۰۰</span>
+        <h4>ورود به دنیای انیمیشن</h4>
+        <p>با After Effects آشنا شدم و اولین موشنگرافیک کوتاهم را برای یک پروژه مدرسهای ساختم.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-year">۱۴۰۱</span>
+        <h4>انیمیشن دو بعدی حرفهای</h4>
+        <p>یادگیری Moho و ریگینگ کاراکتر؛ ساخت انیمیشنهای کوتاه با داستان و صداگذاری.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-year">۱۴۰۲</span>
+        <h4>مدرسه شهید بهشتی نیشابور</h4>
+        <p>ورود به مدرسه شهید بهشتی و ادامه دادن یادگیری برنامهنویسی در کنار درسها.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-year">۱۴۰۴</span>
+        <h4>پروژههای آزاد و همکاری</h4>
+        <p>ساخت سایت، انیمیشن تبلیغاتی و محتوای دیجیتال برای چند پروژه مستقل.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ تماس ═══════════════ -->
+<section id="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker" data-reveal>تماس</span>
+      <h2 class="sec-title" data-reveal style="--d:.08s">بیا یه پروژه با هم بسازیم</h2>
+      <p class="sec-sub" data-reveal style="--d:.16s">ایدهای داری؟ پیام بده تا دربارهش حرف بزنیم.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="card glow" data-reveal="right">
+        <h3>راههای ارتباطی</h3>
+        <p>سریعترین راه، پیام در شبکههای اجتماعی یا ایمیل است.</p>
+
+        <div class="contact-item" data-cursor>
+          <div class="ci">📧</div>
+          <div><small>ایمیل</small><b>amirhossein@example.com</b></div>
+        </div>
+        <div class="contact-item" data-cursor>
+          <div class="ci">✈️</div>
+          <div><small>تلگرام</small><b>@amirhossein_sobhanikia</b></div>
+        </div>
+        <div class="contact-item" data-cursor>
+          <div class="ci">📸</div>
+          <div><small>اینستاگرام</small><b>@amirhossein.anim</b></div>
+        </div>
+        <div class="contact-item" data-cursor>
+          <div class="ci">📍</div>
+          <div><small>موقعیت</small><b>نیشابور، خراسان رضوی</b></div>
+        </div>
+
+        <div class="chips" style="margin-top:30px">
+          <span class="chip">🕐 پاسخدهی: ۲۴ ساعت</span>
+          <span class="chip">✅ پروژههای دانشآموزی: تخفیف ویژه</span>
+        </div>
+      </div>
+
+      <div class="card" data-reveal="left">
+        <h3>پیام بفرست</h3>
+        <p>فرم را پر کن، سریع جواب میدهم.</p>
+
+        <form id="contactForm" novalidate>
+          <div class="field">
+            <input type="text" id="name" placeholder=" " required>
+            <label for="name">نام و نام خانوادگی</label>
+          </div>
+          <div class="field">
+            <input type="email" id="email" placeholder=" " required>
+            <label for="email">ایمیل یا شماره تماس</label>
+          </div>
+          <div class="field">
+            <textarea id="message" placeholder=" " required></textarea>
+            <label for="message">پیام شما…</label>
+          </div>
+          <button type="submit" class="btn btn-primary submit-btn magnet" data-cursor>ارسال پیام</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════ فوتر ═══════════════ -->
+<footer>
+  <div class="footer-name gradient">امیرحسین سبحانی کیا</div>
+  <div class="footer-note">انیمیشن ساز · برنامه نویس · دانش آموز مدرسه شهید بهشتی نیشابور</div>
+
+  <div class="socials">
+    <a href="#" aria-label="تلگرام" data-cursor>✈️</a>
+    <a href="#" aria-label="اینستاگرام" data-cursor>📸</a>
+    <a href="#" aria-label="گیتهاب" data-cursor>🐙</a>
+    <a href="#" aria-label="ایمیل" data-cursor>📧</a>
+  </div>
+
+  <div class="footer-note">ساختهشده با ❤️ و کد — © <span id="year"></span></div>
+</footer>
+
+<button id="toTop" aria-label="بازگشت به بالا" data-cursor>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V5M5 12l7-7 7 7"/>
+  </svg>
+</button>
+
+<div id="toast">✅ پیام شما با موفقیت ثبت شد</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   ابزارهای کمکی
+   ═══════════════════════════════════════════════════ */
+const $  = (s, c = document) => c.querySelector(s);
+const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
+const toFa = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp  = (a, b, t) => a + (b - a) * t;
+const prefersReduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isDesktop = matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+const html = document.documentElement;
+let mouseX = innerWidth / 2, mouseY = innerHeight / 2;
+let scrollVel = 0, lastScrollY = window.scrollY;
+
+/* ═══════════════════════════════════════════════════
+   پیشبارگذار با شمارنده
+   ═══════════════════════════════════════════════════ */
+(function preload(){
+  const bar = $('#plBar'), num = $('#plNum'), pl = $('#preloader');
+  let p = 0;
+
+  function tick(){
+    p += Math.random() * 9 + 4;
+    if (p >= 100) p = 100;
+    bar.style.width = p + '%';
+    num.textContent = toFa(Math.floor(p));
+
+    if (p < 100) {
+      requestAnimationFrame(tick);
+    } else {
+      setTimeout(() => {
+        pl.classList.add('done');
+        html.classList.add('ready');
+        setTimeout(() => pl.remove(), 1400);
+      }, 280);
+    }
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* ═══════════════════════════════════════════════════
+   شکستن تیتر به کاراکتر
+   ═══════════════════════════════════════════════════ */
+(function splitHero(){
+  $$('#heroTitle .gradient').forEach(el => {
+    const chars = Array.from(el.textContent.trim());
+    el.textContent = '';
+    const frag = document.createDocumentFragment();
+    chars.forEach((ch, i) => {
+      const s = document.createElement('span');
+      s.className = 'ch';
+      s.textContent = ch === ' ' ? '\u00A0' : ch;
+      s.style.setProperty('--i', i);
+      frag.appendChild(s);
+    });
+    el.appendChild(frag);
+  });
+})();
+
+/* ═══════════════════════════════════════════════════
+   تم تاریک / روشن
+   ═══════════════════════════════════════════════════ */
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) html.dataset.theme = savedTheme;
+
+$('#themeBtn').addEventListener('click', () => {
+  html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', html.dataset.theme);
+  particleColor = getParticleColor();
+});
+
+/* ═══════════════════════════════════════════════════
+   تایپرایتر
+   ═══════════════════════════════════════════════════ */
+(function typewriter(){
+  const roles = ['انیمیشن ساز', 'برنامه نویس', 'طراح رابط کاربری', 'دانش آموز شهید بهشتی'];
+  const el = $('#typed');
+  let ri = 0, ci = 0, deleting = false;
+
+  function loop(){
+    const word = roles[ri];
+    el.textContent = word.slice(0, ci);
+
+    if (!deleting) {
+      ci++;
+      if (ci > word.length) { deleting = true; return setTimeout(loop, 1700); }
+      return setTimeout(loop, 90);
+    }
+    ci--;
+    if (ci < 0) {
+      deleting = false; ci = 0; ri = (ri + 1) % roles.length;
+      return setTimeout(loop, 300);
+    }
+    return setTimeout(loop, 42);
+  }
+  setTimeout(loop, 1400);
+})();
+
+/* ═══════════════════════════════════════════════════
+   کرسر سفارشی
+   ═══════════════════════════════════════════════════ */
+(function cursor(){
+  if (!isDesktop) return;
+  const root = $('#cursor'), label = $('#cLabel');
+  let rx = mouseX, ry = mouseY, dx = mouseX, dy = mouseY;
+
+  addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    document.body.classList.add('mouse-on');
+  });
+
+  (function frame(){
+    rx = lerp(rx, mouseX, 0.16);
+    ry = lerp(ry, mouseY, 0.16);
+    dx = lerp(dx, mouseX, 0.55);
+    dy = lerp(dy, mouseY, 0.55);
+
+    root.style.setProperty('--x', rx + 'px');
+    root.style.setProperty('--y', ry + 'px');
+    root.style.setProperty('--dx', dx + 'px');
+    root.style.setProperty('--dy', dy + 'px');
+    requestAnimationFrame(frame);
+  })();
+
+  const hoverables = 'a, button, input, textarea, [data-cursor], .skill, .work, .stat, .chip';
+
+  document.addEventListener('mouseover', e => {
+    const target = e.target.closest(hoverables);
+    const card = e.target.closest('[data-cursor-label]');
+
+    if (card) {
+      label.textContent = card.dataset.cursorLabel;
+      root.classList.add('has-label', 'is-hover');
+    } else if (target) {
+      root.classList.add('is-hover');
+      root.classList.remove('has-label');
+    } else {
+      root.classList.remove('is-hover', 'has-label');
+    }
+  });
+
+  addEventListener('mousedown', () => root.classList.add('is-down'));
+  addEventListener('mouseup',   () => root.classList.remove('is-down'));
+
+  /* اسپاتلایت متحرک */
+  const spot = $('#spotlight');
+  addEventListener('mousemove', e => {
+    spot.style.setProperty('--mx', e.clientX + 'px');
+    spot.style.setProperty('--my', e.clientY + 'px');
+  });
+})();
+
+/* ═══════════════════════════════════════════════════
+   پارالاکس موس روی بلابها
+   ═══════════════════════════════════════════════════ */
+const blobs = $$('.blobs span').map(el => ({
+  el,
+  fx: parseFloat(el.dataset.mx || 0),
+  fy: parseFloat(el.dataset.my || 0),
+  x: 0, y: 0
+}));
+
+/* ═══════════════════════════════════════════════════
+   دکمههای مغناطیسی
+   ═══════════════════════════════════════════════════ */
+(function magnets(){
+  if (!isDesktop || prefersReduce) return;
+  $$('.magnet').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      el.style.transform = `translate(${x * 0.22}px, ${y * 0.28}px) scale(1.04)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+  });
+})();
+
+/* ═══════════════════════════════════════════════════
+   Tilt سهبعدی + Glare + گلو مهارتها
+   ═══════════════════════════════════════════════════ */
+(function interactive3D(){
+  if (!isDesktop) return;
+
+  $$('[data-tilt]').forEach(card => {
+    const glare = $('.glare', card);
+
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+
+      card.style.transform =
+        `perspective(1000px) rotateY(${(px - .5) * 12}deg) rotateX(${(.5 - py) * 12}deg) translateY(-8px) scale(1.02)`;
+
+      if (glare) {
+        glare.style.setProperty('--gx', (px * 100) + '%');
+        glare.style.setProperty('--gy', (py * 100) + '%');
+      }
+    });
+
+    card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+  });
+
+  $$('.skill').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--px', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--py', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  /* کارت بصری «درباره من» */
+  const vc = $('#visualCard');
+  if (vc) {
+    addEventListener('mousemove', e => {
+      const x = (e.clientX / innerWidth - .5);
+      const y = (e.clientY / innerHeight - .5);
+      vc.style.transform = `perspective(900px) rotateY(${x * 14}deg) rotateX(${-y * 14}deg)`;
+    });
+  }
+})();
+
+/* ═══════════════════════════════════════════════════
+   Reveal روی اسکرول
+   ═══════════════════════════════════════════════════ */
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      revealObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+$$('[data-reveal]').forEach(el => revealObserver.observe(el));
+
+/* ═══════════════════════════════════════════════════
+   شمارندهها
+   ═══════════════════════════════════════════════════ */
+function animateNumber(el, target, dur = 1600, suffix = '') {
+  const t0 = performance.now();
+  (function step(t){
+    const p = clamp((t - t0) / dur, 0, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = toFa(Math.round(target * eased)) + suffix;
+    if (p < 1) requestAnimationFrame(step);
+  })(t0);
+}
+
+const countObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateNumber(e.target, +e.target.dataset.count, 1700, '+');
+      countObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.6 });
+
+$$('[data-count]').forEach(el => countObserver.observe(el));
+
+/* مهارتها */
+const skillObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in');
+    const lvl = $('.lvl', e.target);
+    animateNumber(lvl, +e.target.dataset.val, 1500, '٪');
+    skillObserver.unobserve(e.target);
+  });
+}, { threshold: 0.4 });
+
+$$('.skill').forEach(el => skillObserver.observe(el));
+
+/* ═══════════════════════════════════════════════════
+   تایملاین: خط با اسکرول کشیده میشود
+   ═══════════════════════════════════════════════════ */
+const timelineEl = $('#timeline');
+const tlItems = $$('.tl-item');
+const tlObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('lit');
+  });
+}, { threshold: 0.6 });
+tlItems.forEach(el => tlObserver.observe(el));
+
+/* ═══════════════════════════════════════════════════
+   گالری پینشده افقی
+   ═══════════════════════════════════════════════════ */
+const worksSec = $('#works');
+const pinEl = $('#pin');
+const trackEl = $('#track');
+const pinBarEl = $('#pinBar');
+let pinEnabled = false, pinDistance = 0, pinTop = 0, pinHeight = 0;
+
+function setupPin(){
+  pinEnabled = innerWidth > 820;
+
+  if (!pinEnabled) {
+    worksSec.style.height = 'auto';
+    trackEl.style.transform = '';
+    return;
+  }
+
+  trackEl.style.transform = 'translate3d(0,0,0)';
+  const trackWidth = trackEl.scrollWidth;
+  pinDistance = Math.max(0, trackWidth - innerWidth);
+  pinHeight = innerHeight + pinDistance;
+
+  worksSec.style.height = pinHeight + 'px';
+  pinTop = worksSec.offsetTop;
+}
+
+function updatePin(){
+  if (!pinEnabled) return;
+  const progress = clamp((window.scrollY - pinTop) / Math.max(1, pinDistance), 0, 1);
+  trackEl.style.transform = `translate3d(${progress * pinDistance}px,0,0)`;
+  if (pinBarEl) pinBarEl.style.width = (progress * 100) + '%';
+}
+
+/* ═══════════════════════════════════════════════════
+   مارکی با سرعت واکنشی به اسکرول
+   ═══════════════════════════════════════════════════ */
+const marqueeEl = $('#marquee');
+let marqueeOffset = 0;
+
+/* ═══════════════════════════════════════════════════
+   ناوبری
+   ═══════════════════════════════════════════════════ */
+const nav = $('#nav');
+const navLinks = $('#navLinks');
+const burger = $('#burger');
+
+burger.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  burger.classList.toggle('open');
+});
+$$('#navLinks a').forEach(a => a.addEventListener('click', () => {
+  navLinks.classList.remove('open');
+  burger.classList.remove('open');
+}));
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    navLinks.classList.remove('open');
+    burger.classList.remove('open');
+  }
+});
+
+/* لینک فعال */
+const sectionEls = $$('main section[id]');
+const linkMap = new Map($$('#navLinks a').map(a => [a.getAttribute('href').slice(1), a]));
+
+const navObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      linkMap.forEach(a => a.classList.remove('active'));
+      linkMap.get(e.target.id)?.classList.add('active');
+    }
+  });
+}, { rootMargin: '-45% 0px -50% 0px' });
+sectionEls.forEach(s => navObserver.observe(s));
+
+/* ═══════════════════════════════════════════════════
+   بازگشت به بالا
+   ═══════════════════════════════════════════════════ */
+const toTop = $('#toTop');
+toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+/* ═══════════════════════════════════════════════════
+   بکگراند ذرهای تعاملی
+   ═══════════════════════════════════════════════════ */
+const cv = $('#bg');
+const ctx = cv.getContext('2d', { alpha: true });
+let cw = 0, ch = 0, dpr = 1;
+let particles = [];
+let particleColor = '150,110,255';
+
+function getParticleColor(){
+  return getComputedStyle(html).getPropertyValue('--particle-rgb').trim() || '150,110,255';
+}
+particleColor = getParticleColor();
+
+function resizeCanvas(){
+  dpr = Math.min(devicePixelRatio || 1, 2);
+  cw = innerWidth; ch = innerHeight;
+  cv.width = Math.floor(cw * dpr);
+  cv.height = Math.floor(ch * dpr);
+  cv.style.width = cw + 'px';
+  cv.style.height = ch + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const count = clamp(Math.floor(cw / 17), 34, 100);
+  particles = Array.from({ length: count }, () => ({
+    x: Math.random() * cw,
+    y: Math.random() * ch,
+    vx: (Math.random() - .5) * .34,
+    vy: (Math.random() - .5) * .34,
+    r: Math.random() * 1.7 + .7,
+    o: Math.random() * .35 + .25
+  }));
+}
+
+const LINK_DIST = 128;
+const MOUSE_R = 140;
+
+function drawParticles(){
+  ctx.clearRect(0, 0, cw, ch);
+
+  for (let i = 0; i < particles.length; i++) {
+    const p = particles[i];
+
+    /* رانش از موس */
+    const mdx = p.x - mouseX, mdy = p.y - mouseY;
+    const md = Math.hypot(mdx, mdy);
+
+    if (md < MOUSE_R && md > 0.01) {
+      const force = (1 - md / MOUSE_R) * 1.5;
+      p.x += (mdx / md) * force;
+      p.y += (mdy / md) * force;
+    }
+
+    p.x += p.vx;
+    p.y += p.vy;
+
+    if (p.x < -20) p.x = cw + 20;
+    if (p.x > cw + 20) p.x = -20;
+    if (p.y < -20) p.y = ch + 20;
+    if (p.y > ch + 20) p.y = -20;
+
+    /* نقطه */
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${particleColor},${p.o})`;
+    ctx.fill();
+
+    /* خطوط */
+    for (let j = i + 1; j < particles.length; j++) {
+      const q = particles[j];
+      const dx = p.x - q.x, dy = p.y - q.y;
+      const d = Math.hypot(dx, dy);
+
+      if (d < LINK_DIST) {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(q.x, q.y);
+        ctx.strokeStyle = `rgba(${particleColor},${.18 * (1 - d / LINK_DIST)})`;
+        ctx.lineWidth = .75;
+        ctx.stroke();
+      }
+    }
+  }
+
+  requestAnimationFrame(drawParticles);
+}
+
+resizeCanvas();
+if (!prefersReduce) drawParticles();
+
+/* ═══════════════════════════════════════════════════
+   حلقه اصلی: اسکرول، پارالاکس، مارکی
+   ═══════════════════════════════════════════════════ */
+const heroInner = $('.hero-inner');
+const progressBar = $('#progressBar');
+const progressWrap = $('.progress');
+const marqueeSeqWidth = () => {
+  const seq = $('.marquee-seq', marqueeEl);
+  return seq ? seq.getBoundingClientRect().width : 0;
+};
+
+let lastFrameScroll = window.scrollY;
+
+function mainLoop(){
+  const sy = window.scrollY;
+  scrollVel = sy - lastFrameScroll;
+  lastFrameScroll = sy;
+
+  /* نوار پیشرفت کلی */
+  const docH = document.documentElement.scrollHeight - innerHeight;
+  const docP = clamp(sy / Math.max(1, docH), 0, 1);
+  progressBar.style.width = (docP * 100) + '%';
+  progressWrap.style.opacity = docP > 0.005 ? '1' : '0';
+
+  /* ناوبری */
+  nav.classList.toggle('scrolled', sy > 40);
+  toTop.classList.toggle('show', sy > 620);
+
+  /* هیرو: محو + کوچک شدن */
+  if (heroInner && !prefersReduce) {
+    const p = clamp(sy / (innerHeight * .9), 0, 1);
+    heroInner.style.transform = `translate3d(0,${sy * .22}px,0) scale(${1 - p * .12})`;
+    heroInner.style.opacity = String(1 - p * 1.05);
+  }
+
+  /* بلابها */
+  if (!prefersReduce) {
+    blobs.forEach(b => {
+      const tx = (mouseX - innerWidth / 2) * b.fx;
+      const ty = (mouseY - innerHeight / 2) * b.fy + sy * (b.fx * .18);
+      b.x = lerp(b.x, tx, .07);
+      b.y = lerp(b.y, ty, .07);
+      b.el.style.transform = `translate3d(${b.x}px,${b.y}px,0)`;
+    });
+  }
+
+  /* مارکی */
+  if (marqueeEl) {
+    const seqW = marqueeSeqWidth();
+    const speed = 1 + Math.min(Math.abs(scrollVel) * .09, 7);
+    marqueeOffset += speed;
+    if (seqW > 0 && marqueeOffset > seqW) marqueeOffset -= seqW;
+    marqueeEl.style.transform = `translate3d(${-marqueeOffset}px,0,0)`;
+  }
+
+  /* پین افقی */
+  updatePin();
+
+  /* تایملاین */
+  if (timelineEl) {
+    const r = timelineEl.getBoundingClientRect();
+    const p = clamp((innerHeight * .62 - r.top) / r.height, 0, 1);
+    timelineEl.style.setProperty('--tlp', p.toFixed(4));
+  }
+
+  requestAnimationFrame(mainLoop);
+}
+requestAnimationFrame(mainLoop);
+
+/* ═══════════════════════════════════════════════════
+   فرم تماس
+   ═══════════════════════════════════════════════════ */
+const form = $('#contactForm');
+const toast = $('#toast');
+
+function showToast(msg, ok = true){
+  toast.textContent = msg;
+  toast.style.background = ok
+    ? 'linear-gradient(135deg,var(--p1),var(--p2))'
+    : 'linear-gradient(135deg,#ff4d6d,#ff9d5c)';
+  toast.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => toast.classList.remove('show'), 3400);
+}
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const name = $('#name').value.trim();
+  const email = $('#email').value.trim();
+  const message = $('#message').value.trim();
+
+  if (name.length < 3)     return showToast('⚠️ لطفاً نام کامل خود را وارد کنید', false);
+  if (email.length < 4)    return showToast('⚠️ ایمیل یا شماره تماس را وارد کنید', false);
+  if (message.length < 10) return showToast('⚠️ پیام باید حداقل ۱۰ حرف باشد', false);
+
+  // ← اینجا میتوانی به API واقعی وصل شوی
+  showToast('✅ پیامت ثبت شد، بهزودی جواب میدم!');
+  form.reset();
+});
+
+/* ═══════════════════════════════════════════════════
+   ریسایز
+   ═══════════════════════════════════════════════════ */
+let resizeTimer;
+addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    resizeCanvas();
+    setupPin();
+    updatePin();
+  }, 180);
+});
+
+/* ═══════════════════════════════════════════════════
+   شروع
+   ═══════════════════════════════════════════════════ */
+$('#year').textContent = toFa(new Date().getFullYear());
+
+addEventListener('load', () => {
+  setupPin();
+  updatePin();
+});
+setupPin();
+
+/* پشتیبانی از فونت و تصاویر برای ابعاد دقیق */
+if (document.fonts) {
+  document.fonts.ready.then(() => { setupPin(); updatePin(); });
+}
+</script>
+</body>
+</html>
