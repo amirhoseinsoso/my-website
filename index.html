@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>پیانو نئون · Neon Piano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --y:#ffe000;
+  --y2:#ffb800;
+  --c:#00eaff;
+  --m:#ff2bd6;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  min-height:100vh;
+  background:#050506;
+  color:#f0f0f0;
+  font-family:'Vazirmatn','Segoe UI',Tahoma,sans-serif;
+  padding:26px 16px 46px;
+  display:flex;
+  justify-content:center;
+  overflow-x:hidden;
+  position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:-25%;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(255,224,0,.16), transparent 42%),
+    radial-gradient(circle at 84% 12%, rgba(0,234,255,.13), transparent 42%),
+    radial-gradient(circle at 50% 104%, rgba(255,43,214,.13), transparent 48%);
+  animation:drift 20s ease-in-out infinite alternate;
+  pointer-events:none;z-index:0;
+}
+@keyframes drift{
+  from{transform:translate3d(-3%,-2%,0) scale(1)}
+  to{transform:translate3d(3%,2%,0) scale(1.12)}
+}
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(255,224,0,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,224,0,.05) 1px,transparent 1px);
+  background-size:48px 48px;
+  -webkit-mask-image:radial-gradient(circle at 50% 38%,#000 18%,transparent 76%);
+  mask-image:radial-gradient(circle at 50% 38%,#000 18%,transparent 76%);
+  pointer-events:none;z-index:0;
+}
+.wrap{width:min(1180px,100%);position:relative;z-index:1}
+
+/* ---------- HEADER ---------- */
+.hero{text-align:center;margin-bottom:14px}
+.badge{
+  display:inline-block;
+  font-size:.68rem;letter-spacing:.45em;
+  color:rgba(255,224,0,.72);
+  border:1px solid rgba(255,224,0,.28);
+  border-radius:999px;
+  padding:5px 16px 5px 22px;
+  background:rgba(255,224,0,.05);
+  box-shadow:0 0 22px rgba(255,224,0,.12),inset 0 0 18px rgba(255,224,0,.05);
+  margin-bottom:14px;
+}
+.hero h1{
+  font-size:clamp(2.1rem,7.4vw,4.4rem);
+  font-weight:900;
+  letter-spacing:-.02em;
+  line-height:1;
+  margin:0 0 12px;
+  color:#fff;
+  text-shadow:0 0 18px rgba(255,224,0,.4),0 0 60px rgba(255,190,0,.18);
+}
+.hero h1 span{
+  color:var(--y);
+  text-shadow:0 0 10px rgba(255,224,0,.95),0 0 34px rgba(255,200,0,.65),0 0 80px rgba(255,160,0,.45);
+  animation:flicker 5s infinite;
+}
+@keyframes flicker{
+  0%,90%,100%{opacity:1}
+  92%{opacity:.5}
+  94%{opacity:1}
+  96%{opacity:.68}
+  98%{opacity:1}
+}
+.hero p{
+  margin:0 auto;
+  max-width:640px;
+  font-size:clamp(.82rem,2.4vw,.98rem);
+  line-height:1.9;
+  color:#9c9c9c;
+}
+
+/* ---------- VISUALIZER ---------- */
+#viz{
+  display:block;width:100%;height:64px;
+  margin:16px 0 4px;
+  opacity:.95;
+}
+
+/* ---------- SONGS ---------- */
+.songs-label{
+  font-size:.7rem;letter-spacing:.3em;color:#6f6f6f;
+  margin:14px 0 10px 0;padding-right:4px;
+}
+.song-list{display:flex;flex-wrap:wrap;gap:10px}
+.song-chip{
+  position:relative;
+  font-family:inherit;
+  background:rgba(255,255,255,.028);
+  border:1px solid rgba(255,224,0,.2);
+  color:#e6e6e6;
+  padding:9px 16px;
+  border-radius:14px;
+  cursor:pointer;
+  display:flex;flex-direction:column;align-items:flex-start;gap:1px;
+  transition:transform .18s,box-shadow .22s,background .22s,border-color .22s;
+  overflow:hidden;
+}
+.song-chip .t{font-size:.9rem;font-weight:600}
+.song-chip .s{font-size:.66rem;color:#7d7d7d}
+.song-chip:hover{
+  transform:translateY(-3px);
+  border-color:rgba(255,224,0,.72);
+  background:rgba(255,224,0,.08);
+  box-shadow:0 0 24px rgba(255,224,0,.2),inset 0 0 18px rgba(255,224,0,.06);
+}
+.song-chip.playing{
+  border-color:var(--y);
+  background:linear-gradient(180deg,rgba(255,224,0,.2),rgba(255,224,0,.05));
+  box-shadow:0 0 26px rgba(255,224,0,.45),inset 0 0 22px rgba(255,224,0,.1);
+}
+.song-chip.playing .t{color:#fff;text-shadow:0 0 12px rgba(255,224,0,.9)}
+.song-chip.playing .s{color:#ffd400}
+.song-chip.playing::after{
+  content:'';position:absolute;top:10px;left:10px;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--y);box-shadow:0 0 12px var(--y);
+  animation:blip 1s ease-in-out infinite;
+}
+@keyframes blip{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+
+.now-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin:16px 0 12px;
+  font-size:.78rem;color:#7c7c7c;
+  min-height:32px;
+}
+.now-bar span.on{color:var(--y);text-shadow:0 0 14px rgba(255,224,0,.6)}
+.stop-btn{
+  font-family:inherit;font-size:.74rem;
+  background:rgba(255,43,214,.1);
+  border:1px solid rgba(255,43,214,.5);
+  color:#ff8fe8;
+  padding:6px 14px;border-radius:999px;cursor:pointer;
+  transition:.2s;
+}
+.stop-btn:hover{background:rgba(255,43,214,.24);box-shadow:0 0 20px rgba(255,43,214,.4)}
+
+/* ---------- PIANO ---------- */
+.piano-shell{
+  background:linear-gradient(180deg,#131313 0%,#0a0a0a 55%,#060606 100%);
+  border:1px solid rgba(255,224,0,.22);
+  border-radius:20px;
+  padding:12px 12px 14px;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.9),
+    0 34px 70px rgba(0,0,0,.8),
+    0 0 90px rgba(255,190,0,.07),
+    inset 0 1px 0 rgba(255,224,0,.14);
+}
+.piano-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 6px 10px;
+  direction:ltr;
+}
+.brand{font-size:.6rem;letter-spacing:.34em;color:rgba(255,224,0,.5);font-weight:600}
+.lights{display:flex;gap:7px}
+.lights i{width:7px;height:7px;border-radius:50%;display:block}
+.lights i:nth-child(1){background:var(--m);box-shadow:0 0 10px var(--m)}
+.lights i:nth-child(2){background:var(--y);box-shadow:0 0 10px var(--y)}
+.lights i:nth-child(3){background:var(--c);box-shadow:0 0 10px var(--c)}
+
+.piano-scroll{
+  overflow-x:auto;overflow-y:hidden;
+  direction:ltr;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:6px;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,224,0,.45) transparent;
+}
+.piano-scroll::-webkit-scrollbar{height:6px}
+.piano-scroll::-webkit-scrollbar-thumb{background:rgba(255,224,0,.45);border-radius:8px}
+.piano-scroll::-webkit-scrollbar-track{background:transparent}
+
+.keyboard-inner{min-width:760px;direction:ltr}
+.keyboard{
+  position:relative;
+  display:flex;
+  height:clamp(165px,27vw,250px);
+  touch-action:pan-x;
+  filter:drop-shadow(0 14px 18px rgba(0,0,0,.6));
+}
+
+.key{position:relative;user-select:none;-webkit-user-select:none;cursor:pointer}
+
+.key.white{
+  flex:1 1 0;min-width:0;
+  background:linear-gradient(180deg,#fffdf0 0%,#f7f0d4 55%,#d6cb9b 100%);
+  border:1px solid rgba(0,0,0,.55);
+  border-top:none;
+  border-radius:0 0 9px 9px;
+  box-shadow:
+    inset -2px 0 5px rgba(0,0,0,.1),
+    inset 0 -12px 16px rgba(0,0,0,.13),
+    0 8px 14px rgba(0,0,0,.5);
+  display:flex;flex-direction:column;justify-content:flex-end;align-items:center;
+  gap:3px;padding-bottom:11px;
+  transition:background .09s,box-shadow .13s,transform .06s;
+}
+.key.white.active{
+  background:linear-gradient(180deg,#fffce6 0%,#ffe45c 45%,#ffae00 100%);
+  box-shadow:
+    inset 0 -16px 26px rgba(255,190,0,.7),
+    inset 0 0 26px rgba(255,240,140,.95),
+    0 0 28px rgba(255,214,0,.8),
+    0 0 70px rgba(255,180,0,.4);
+  transform:translateY(3px);
+}
+
+.key.black{
+  position:absolute;top:0;height:62%;z-index:3;
+  transform:translateX(-50%);
+  background:linear-gradient(180deg,#141414 0%,#000 62%,#1c1c1c 100%);
+  border:1px solid #000;
+  border-radius:0 0 6px 6px;
+  box-shadow:0 7px 12px rgba(0,0,0,.85),inset 0 -2px 0 rgba(255,224,0,.22);
+  display:flex;flex-direction:column;justify-content:flex-end;align-items:center;
+  padding-bottom:9px;
+  transition:background .09s,box-shadow .13s,transform .06s;
+}
+.key.black.active{
+  background:linear-gradient(180deg,#2a2400 0%,#ffe000 58%,#ff9d00 100%);
+  border-color:rgba(255,224,0,.9);
+  box-shadow:0 0 24px rgba(255,224,0,.95),0 0 60px rgba(255,180,0,.5),inset 0 -5px 12px rgba(255,255,255,.45);
+  transform:translateX(-50%) translateY(3px);
+}
+
+.key .hint{
+  font-family:'Courier New',monospace;
+  font-size:.58rem;font-weight:700;
+  color:rgba(0,0,0,.55);
+  border:1px solid rgba(0,0,0,.18);
+  background:rgba(0,0,0,.05);
+  border-radius:5px;
+  padding:1px 4px;
+  line-height:1.25;
+  pointer-events:none;
+}
+.key.black .hint{
+  color:rgba(255,224,0,.68);
+  border-color:rgba(255,224,0,.25);
+  background:rgba(255,224,0,.06);
+}
+.key.white.active .hint{color:rgba(80,50,0,.85);border-color:rgba(80,50,0,.25)}
+.key.black.active .hint{color:#3a2b00;border-color:rgba(0,0,0,.3);background:rgba(0,0,0,.12)}
+
+.key .note{
+  font-size:.55rem;font-weight:700;letter-spacing:.05em;
+  color:rgba(120,105,55,.85);
+  pointer-events:none;
+}
+
+.spark{
+  position:absolute;left:50%;bottom:14px;
+  width:7px;height:7px;margin-left:-3.5px;
+  border-radius:50%;pointer-events:none;
+  background:#fff;
+  box-shadow:0 0 10px var(--y),0 0 26px var(--y),0 0 40px rgba(255,150,0,.7);
+  animation:sparkUp .72s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes sparkUp{
+  from{transform:translateY(0) scale(1);opacity:.95}
+  to{transform:translateY(-72px) scale(.15);opacity:0}
+}
+
+/* ---------- CREDIT ---------- */
+.credit{
+  margin-top:40px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  text-align:center;
+}
+.credit .lbl{
+  font-size:.66rem;letter-spacing:.42em;color:#6e6e6e;
+}
+.credit .name{
+  font-size:clamp(1rem,3.4vw,1.42rem);
+  font-weight:800;
+  color:#fff;
+  padding:10px 30px;
+  border-radius:999px;
+  border:1px solid rgba(255,224,0,.38);
+  background:linear-gradient(100deg,rgba(255,224,0,.11),rgba(255,43,214,.07) 50%,rgba(0,234,255,.09));
+  box-shadow:0 0 34px rgba(255,224,0,.16),inset 0 0 26px rgba(255,224,0,.06);
+  text-shadow:0 0 16px rgba(255,224,0,.55);
+  position:relative;
+  overflow:hidden;
+}
+.credit .name::after{
+  content:'';position:absolute;top:0;left:-60%;
+  width:50%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.22),transparent);
+  animation:shine 4.5s ease-in-out infinite;
+}
+@keyframes shine{0%,55%{left:-60%}85%,100%{left:120%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="badge">NEON PIANO</div>
+    <h1>پیانو <span>نئون</span></h1>
+    <p>با موس، لمس یا کیبورد بنواز — یا یکی از آهنگها را بزن تا پیانو خودش شروع کند به نواختن.</p>
+  </header>
+
+  <canvas id="viz"></canvas>
+
+  <div class="songs-label">♪ آهنگها</div>
+  <div class="song-list" id="songList"></div>
+
+  <div class="now-bar">
+    <span id="nowText">آمادهی نوازندگی…</span>
+    <button id="stopBtn" class="stop-btn" hidden>■ توقف</button>
+  </div>
+
+  <section class="piano-shell">
+    <div class="piano-top">
+      <span class="brand">AMIRHOSSEIN · NEON</span>
+      <span class="lights"><i></i><i></i><i></i></span>
+    </div>
+    <div class="piano-scroll" id="pianoScroll">
+      <div class="keyboard-inner">
+        <div class="keyboard" id="keyboard"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="credit">
+    <span class="lbl">طراح</span>
+    <span class="name">امیرحسین سبحانی کیا</span>
+  </footer>
+
+</div>
+
+<script>
+/* =========================================================
+   دادهی آهنگها  ( [نامِ نت یا null برای سکوت , مدت بر حسب بیت] )
+   ========================================================= */
+const SONGS = [
+  {
+    title:'برای الیزه', sub:'بتهوون', bpm:110,
+    notes:[
+      ['E5',.5],['D#5',.5],['E5',.5],['D#5',.5],['E5',.5],['B4',.5],['D5',.5],['C5',.5],['A4',1],
+      [null,.5],['C4',.5],['E4',.5],['A4',.5],['B4',1],
+      [null,.5],['E4',.5],['G#4',.5],['B4',.5],['C5',1],
+      [null,.5],
+      ['E5',.5],['D#5',.5],['E5',.5],['D#5',.5],['E5',.5],['B4',.5],['D5',.5],['C5',.5],['A4',1],
+      [null,.5],['C4',.5],['E4',.5],['A4',.5],['B4',1],
+      [null,.5],['E4',.5],['C5',.5],['B4',.5],['A4',2]
+    ]
+  },
+  {
+    title:'سرود شادی', sub:'بتهوون', bpm:116,
+    notes:[
+      ['E4',1],['E4',1],['F4',1],['G4',1],
+      ['G4',1],['F4',1],['E4',1],['D4',1],
+      ['C4',1],['C4',1],['D4',1],['E4',1],
+      ['E4',1.5],['D4',.5],['D4',2],
+      ['E4',1],['E4',1],['F4',1],['G4',1],
+      ['G4',1],['F4',1],['E4',1],['D4',1],
+      ['C4',1],['C4',1],['D4',1],['E4',1],
+      ['D4',1.5],['C4',.5],['C4',2]
+    ]
+  },
+  {
+    title:'چشمک ستاره', sub:'سنتی', bpm:104,
+    notes:[
+      ['C4',1],['C4',1],['G4',1],['G4',1],['A4',1],['A4',1],['G4',2],
+      ['F4',1],['F4',1],['E4',1],['E4',1],['D4',1],['D4',1],['C4',2],
+      ['G4',1],['G4',1],['F4',1],['F4',1],['E4',1],['E4',1],['D4',2],
+      ['G4',1],['G4',1],['F4',1],['F4',1],['E4',1],['E4',1],['D4',2],
+      ['C4',1],['C4',1],['G4',1],['G4',1],['A4',1],['A4',1],['G4',2],
+      ['F4',1],['F4',1],['E4',1],['E4',1],['D4',1],['D4',1],['C4',2]
+    ]
+  },
+  {
+    title:'تولدت مبارک', sub:'سنتی', bpm:108,
+    notes:[
+      ['G4',.75],['G4',.25],['A4',1],['G4',1],['C5',1],['B4',2],
+      ['G4',.75],['G4',.25],['A4',1],['G4',1],['D5',1],['C5',2],
+      ['G4',.75],['G4',.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+      ['F5',.75],['F5',.25],['E5',1],['C5',1],['D5',1],['C5',2]
+    ]
+  },
+  {
+    title:'زنگولهها', sub:'کریسمس', bpm:132,
+    notes:[
+      ['E4',1],['E4',1],['E4',2],
+      ['E4',1],['E4',1],['E4',2],
+      ['E4',1],['G4',1],['C4',1.5],['D4',.5],['E4',4],
+      ['F4',1],['F4',1],['F4',1.5],['F4',.5],
+      ['F4',1],['E4',1],['E4',1],['E4',.5],['E4',.5],
+      ['E4',1],['D4',1],['D4',1],['E4',1],['D4',2],['G4',2],
+      ['E4',1],['E4',1],['E4',2],
+      ['E4',1],['E4',1],['E4',2],
+      ['E4',1],['G4',1],['C4',1.5],['D4',.5],['E4',4],
+      ['F4',1],['F4',1],['F4',1.5],['F4',.5],
+      ['F4',1],['E4',1],['E4',1],['E4',.5],['E4',.5],
+      ['G4',1],['G4',1],['F4',1],['D4',1],['C4',4]
+    ]
+  }
+];
+
+/* =========================================================
+   موتور صدا
+   ========================================================= */
+let ctx=null, master=null, comp=null, analyser=null, reverbNode=null, reverbGain=null,
+    noiseBuf=null, pianoWave=null;
+
+const PC_NAME = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const PC_MAP  = {C:0,'C#':1,Db:1,D:2,'D#':3,Eb:3,E:4,F:5,'F#':6,Gb:6,G:7,'G#':8,Ab:8,A:9,'A#':10,Bb:10,B:11};
+
+function noteToMidi(name){
+  const m = /^([A-G][#b]?)(-?\d)$/.exec(name);
+  if(!m) return null;
+  return PC_MAP[m[1]] + (parseInt(m[2],10)+1)*12;
+}
+function midiToFreq(m){ return 440 * Math.pow(2,(m-69)/12); }
+
+function makeImpulse(dur, decay){
+  const rate = ctx.sampleRate;
+  const len = Math.max(1, Math.floor(rate*dur));
+  const buf = ctx.createBuffer(2,len,rate);
+  const pre = Math.floor(rate*0.012);
+  for(let ch=0;ch<2;ch++){
+    const d = buf.getChannelData(ch);
+    let last = 0;
+    for(let i=0;i<len;i++){
+      const white = Math.random()*2-1;
+      last = last*0.62 + white*0.38;               // تیره کردن تیل ریورب
+      const fade = Math.pow(1 - i/len, decay);
+      const attack = i < pre ? i/pre : 1;
+      d[i] = last * fade * attack;
+    }
+  }
+  return buf;
+}
+
+function makeNoise(dur){
+  const len = Math.max(1, Math.floor(ctx.sampleRate*dur));
+  const buf = ctx.createBuffer(1,len,ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i] = Math.random()*2-1;
+  return buf;
+}
+
+function makePianoWave(){
+  const H = [1,.42,.26,.16,.11,.075,.055,.04,.028,.02,.014,.01,.007,.005];
+  const real = new Float32Array(H.length+1);
+  const imag = new Float32Array(H.length+1);
+  for(let i=0;i<H.length;i++) imag[i+1] = H[i];
+  return ctx.createPeriodicWave(real,imag,{disableNormalization:false});
+}
+
+function ensureAudio(){
+  if(ctx){
+    if(ctx.state==='suspended') ctx.resume();
+    return;
+  }
+  const AC = window.AudioContext || window.webkitAudioContext;
+  ctx = new AC();
+
+  master = ctx.createGain();
+  master.gain.value = 0.72;
+
+  comp = ctx.createDynamicsCompressor();
+  comp.threshold.value = -16;
+  comp.knee.value = 24;
+  comp.ratio.value = 4;
+  comp.attack.value = 0.004;
+  comp.release.value = 0.28;
+
+  analyser = ctx.createAnalyser();
+  analyser.fftSize = 1024;
+  analyser.smoothingTimeConstant = 0.78;
+
+  master.connect(comp);
+  comp.connect(analyser);
+  analyser.connect(ctx.destination);
+
+  reverbNode = ctx.createConvolver();
+  reverbNode.buffer = makeImpulse(2.4,2.6);
+  reverbGain = ctx.createGain();
+  reverbGain.gain.value = 0.32;
+  reverbNode.connect(reverbGain);
+  reverbGain.connect(master);
+
+  noiseBuf = makeNoise(0.4);
+  pianoWave = makePianoWave();
+}
+
+/* یک نت پیانو با سنتز افزودنی + هارمونیک ناهمفاز + ضربهی چکش + ریورب */
+function playNote(midi, opts){
+  opts = opts || {};
+  ensureAudio();
+
+  const velocity = opts.velocity != null ? opts.velocity : 0.8;
+  const at       = opts.at || 0;
+  const duration = opts.duration || 0;
+
+  const t = at > 0 ? at : ctx.currentTime + 0.005;
+  const f = midiToFreq(midi);
+  const decay = Math.max(1.4, Math.min(6.5, 3.4*Math.pow(220/f,0.42)+0.7));
+  const peak  = 0.30 * velocity * Math.pow(261.6/f,0.18);
+
+  const env = ctx.createGain();
+  const lp = ctx.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.Q.value = 0.6;
+  lp.frequency.setValueAtTime(Math.min(f*12,13000), t);
+  lp.frequency.exponentialRampToValueAtTime(Math.max(f*2.0,300), t + decay*0.6);
+
+  env.gain.setValueAtTime(0.0001, t);
+  env.gain.exponentialRampToValueAtTime(peak, t+0.007);
+  env.gain.exponentialRampToValueAtTime(peak*0.30, t+0.20);
+  env.gain.exponentialRampToValueAtTime(0.0001, t+decay);
+
+  // دو سیم کمی ناهمکوک → ضربان طبیعی پیانو
+  const osc1 = ctx.createOscillator();
+  osc1.setPeriodicWave(pianoWave);
+  osc1.frequency.setValueAtTime(f,t);
+  osc1.detune.setValueAtTime((Math.random()-0.5)*3, t);
+
+  const osc2 = ctx.createOscillator();
+  osc2.setPeriodicWave(pianoWave);
+  osc2.frequency.setValueAtTime(f,t);
+  osc2.detune.setValueAtTime(4 + Math.random()*3, t);
+  const g2 = ctx.createGain();
+  g2.gain.value = 0.45;
+
+  osc1.connect(env);
+  osc2.connect(g2); g2.connect(env);
+  env.connect(lp);
+
+  // ضربهی چکش
+  const ns = ctx.createBufferSource();
+  ns.buffer = noiseBuf;
+  const nbp = ctx.createBiquadFilter();
+  nbp.type = 'bandpass';
+  nbp.frequency.value = Math.min(f*4,5000);
+  nbp.Q.value = 1.2;
+  const ng = ctx.createGain();
+  ng.gain.setValueAtTime(0.0001,t);
+  ng.gain.exponentialRampToValueAtTime(0.055*velocity, t+0.004);
+  ng.gain.exponentialRampToValueAtTime(0.0001, t+0.06);
+  ns.connect(nbp); nbp.connect(ng); ng.connect(lp);
+  ns.start(t); ns.stop(t+0.14);
+
+  lp.connect(master);
+  lp.connect(reverbNode);
+
+  const naturalEnd = t + Math.max(decay, duration + 0.5) + 0.15;
+  osc1.start(t); osc2.start(t);
+  osc1.stop(naturalEnd); osc2.stop(naturalEnd);
+
+  // دَمپر: نت باید در پایان مدتش خفه شود
+  if(duration > 0 && duration < decay*0.85){
+    const off = t + duration;
+    try{ env.gain.cancelAndHoldAtTime(off); }catch(e){ env.gain.cancelScheduledValues(off); }
+    env.gain.setTargetAtTime(0.0001, off, 0.10);
+  }
+
+  return {
+    release(time){
+      try{ env.gain.cancelAndHoldAtTime(time); }catch(e){ env.gain.cancelScheduledValues(time); }
+      env.gain.setTargetAtTime(0.0001, time, 0.07);
+      try{ osc1.stop(time+0.35); osc2.stop(time+0.35); }catch(e){}
+    }
+  };
+}
+
+/* =========================================================
+   ساخت کیبورد
+   ========================================================= */
+const START_MIDI = 48, END_MIDI = 84;
+const WHITE_PC = [0,2,4,5,7,9,11];
+
+const KEYBOARD_MAP = {
+  KeyZ:48, KeyX:50, KeyC:52, KeyV:53, KeyB:55, KeyN:57, KeyM:59,
+  KeyA:60, KeyW:61, KeyS:62, KeyE:63, KeyD:64, KeyF:65, KeyT:66,
+  KeyG:67, KeyY:68, KeyH:69, KeyU:70, KeyJ:71,
+  KeyK:72, KeyO:73, KeyL:74, KeyP:75, Semicolon:76, Quote:77
+};
+const MIDI_HINT = {};
+Object.keys(KEYBOARD_MAP).forEach(code=>{
+  const midi = KEYBOARD_MAP[code];
+  MIDI_HINT[midi] = code.indexOf('Key')===0 ? code.slice(3)
+                  : code==='Semicolon' ? ';'
+                  : code==='Quote' ? "'" : '';
+});
+
+const keyboardEl = document.getElementById('keyboard');
+const keyEls = new Map();
+
+const whiteMidis = [];
+for(let m=START_MIDI;m<=END_MIDI;m++) if(WHITE_PC.indexOf(m%12) !== -1) whiteMidis.push(m);
+const nWhite = whiteMidis.length;
+
+whiteMidis.forEach(m=>{
+  const el = document.createElement('div');
+  el.className = 'key white';
+  el.dataset.midi = m;
+  const hint = MIDI_HINT[m];
+  if(hint) el.insertAdjacentHTML('beforeend','<span class="hint">'+hint+'</span>');
+  if(m % 12 === 0){
+    el.insertAdjacentHTML('beforeend','<span class="note">'+PC_NAME[m%12]+(Math.floor(m/12)-1)+'</span>');
+  }
+  keyboardEl.appendChild(el);
+  keyEls.set(m, el);
+});
+
+for(let m=START_MIDI;m<=END_MIDI;m++){
+  if(WHITE_PC.indexOf(m%12) !== -1) continue;
+  let w = 0;
+  for(let k=0;k<whiteMidis.length;k++) if(whiteMidis[k] < m) w++;
+  const el = document.createElement('div');
+  el.className = 'key black';
+  el.dataset.midi = m;
+  el.style.left = (w/nWhite*100) + '%';
+  el.style.width = (100/nWhite*0.62) + '%';
+  const hint = MIDI_HINT[m];
+  if(hint) el.insertAdjacentHTML('beforeend','<span class="hint">'+hint+'</span>');
+  keyboardEl.appendChild(el);
+  keyEls.set(m, el);
+}
+
+/* =========================================================
+   نوازندگی با موس / لمس
+   ========================================================= */
+const heldVoices = new Map();     // midi -> voice
+const pointers = new Map();       // pointerId -> midi
+
+function setKeyActive(midi, on){
+  const el = keyEls.get(midi);
+  if(!el) return;
+  if(on) el.classList.add('active');
+  else el.classList.remove('active');
+}
+
+function spawnSpark(el){
+  const s = document.createElement('span');
+  s.className = 'spark';
+  el.appendChild(s);
+  setTimeout(()=>{ if(s.parentNode) s.parentNode.removeChild(s); }, 750);
+}
+
+function noteOn(midi, velocity){
+  ensureAudio();
+  const v = playNote(midi, {velocity: velocity || 0.82});
+  heldVoices.set(midi, v);
+  setKeyActive(midi, true);
+  const el = keyEls.get(midi);
+  if(el) spawnSpark(el);
+}
+
+function noteOff(midi){
+  setKeyActive(midi, false);
+  const v = heldVoices.get(midi);
+  if(v){
+    v.release(ctx.currentTime + 0.02);
+    heldVoices.delete(midi);
+  }
+}
+
+keyboardEl.addEventListener('pointerdown', e=>{
+  const key = e.target.closest('.key');
+  if(!key) return;
+  e.preventDefault();
+  const midi = parseInt(key.dataset.midi,10);
+  pointers.set(e.pointerId, midi);
+  noteOn(midi);
+});
+
+window.addEventListener('pointermove', e=>{
+  if(!pointers.has(e.pointerId)) return;
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const key = el && el.closest ? el.closest('.key') : null;
+  const cur = pointers.get(e.pointerId);
+  if(key){
+    const midi = parseInt(key.dataset.midi,10);
+    if(midi !== cur){
+      noteOff(cur);
+      pointers.set(e.pointerId, midi);
+      noteOn(midi);
+    }
+  }
+});
+
+function pointerEnd(e){
+  if(!pointers.has(e.pointerId)) return;
+  noteOff(pointers.get(e.pointerId));
+  pointers.delete(e.pointerId);
+}
+window.addEventListener('pointerup', pointerEnd);
+window.addEventListener('pointercancel', pointerEnd);
+
+/* کیبورد کامپیوتر */
+const pressedCodes = new Set();
+window.addEventListener('keydown', e=>{
+  if(e.repeat) return;
+  const midi = KEYBOARD_MAP[e.code];
+  if(midi == null) return;
+  e.preventDefault();
+  pressedCodes.add(e.code);
+  noteOn(midi);
+});
+window.addEventListener('keyup', e=>{
+  const midi = KEYBOARD_MAP[e.code];
+  if(midi == null) return;
+  pressedCodes.delete(e.code);
+  noteOff(midi);
+});
+
+/* =========================================================
+   پخش آهنگها
+   ========================================================= */
+const songListEl = document.getElementById('songList');
+const nowText = document.getElementById('nowText');
+const stopBtn = document.getElementById('stopBtn');
+
+let playingIndex = -1;
+let songTimeouts = [];
+let songVoices = [];
+let songToken = 0;
+let songEndTimer = null;
+
+SONGS.forEach((s,i)=>{
+  const b = document.createElement('button');
+  b.className = 'song-chip';
+  b.dataset.index = i;
+  b.innerHTML = '<span class="t">'+s.title+'</span><span class="s">'+s.sub+'</span>';
+  b.addEventListener('click', ()=> toggleSong(i));
+  songListEl.appendChild(b);
+});
+
+function clearSongTimers(){
+  songTimeouts.forEach(t=>clearTimeout(t));
+  songTimeouts = [];
+  if(songEndTimer){ clearTimeout(songEndTimer); songEndTimer = null; }
+}
+
+function stopEverything(){
+  songToken++;
+  clearSongTimers();
+  songVoices.forEach(v=>{ try{ v.release(ctx.currentTime + 0.01); }catch(e){} });
+  songVoices = [];
+  playingIndex = -1;
+  updateSongUI();
+}
+
+function updateSongUI(){
+  const chips = songListEl.querySelectorAll('.song-chip');
+  chips.forEach(c=>{
+    c.classList.toggle('playing', parseInt(c.dataset.index,10) === playingIndex);
+  });
+  if(playingIndex >= 0){
+    nowText.textContent = 'در حال پخش: ' + SONGS[playingIndex].title;
+    nowText.classList.add('on');
+    stopBtn.hidden = false;
+  } else {
+    nowText.textContent = 'آمادهی نوازندگی…';
+    nowText.classList.remove('on');
+    stopBtn.hidden = true;
+  }
+}
+
+function clearFlash(){
+  keyEls.forEach(el=>el.classList.remove('active'));
+}
+
+stopBtn.addEventListener('click', ()=> stopEverything());
+
+function toggleSong(index){
+  ensureAudio();
+  if(playingIndex === index){ stopEverything(); return; }
+
+  stopEverything();
+  const token = ++songToken;
+  const song = SONGS[index];
+  playingIndex = index;
+  updateSongUI();
+
+  const beat = 60 / song.bpm;
+  const startAt = ctx.currentTime + 0.18;
+  let offset = 0;
+
+  song.notes.forEach(note=>{
+    const name = note[0];
+    const beats = note[1];
+    const dur = beats * beat;
+
+    if(name){
+      const midi = noteToMidi(name);
+      if(midi != null){
+        const when = startAt + offset;
+        const voice = playNote(midi, {
+          at: when,
+          duration: dur * 0.9,
+          velocity: 0.78
+        });
+        songVoices.push(voice);
+
+        const delayMs = Math.max(0, (when - ctx.currentTime) * 1000);
+        const flashMs = Math.max(110, dur * 900);
+        const id = setTimeout(()=>{
+          if(token !== songToken) return;
+          const el = keyEls.get(midi);
+          if(!el) return;
+          el.classList.add('active');
+          clearTimeout(el._flash);
+          el._flash = setTimeout(()=>el.classList.remove('active'), flashMs);
+        }, delayMs);
+        songTimeouts.push(id);
+      }
+    }
+    offset += dur;
+  });
+
+  const totalMs = offset * 1000 + 600;
+  songEndTimer = setTimeout(()=>{
+    if(token !== songToken) return;
+    playingIndex = -1;
+    songVoices = [];
+    updateSongUI();
+  }, totalMs);
+}
+
+/* =========================================================
+   ویژوالایزر
+   ========================================================= */
+const viz = document.getElementById('viz');
+const vctx = viz.getContext('2d');
+let freqData = null;
+
+function resizeViz(){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = viz.clientWidth || 300;
+  const h = viz.clientHeight || 64;
+  viz.width = Math.floor(w*dpr);
+  viz.height = Math.floor(h*dpr);
+  vctx.setTransform(dpr,0,0,dpr,0,0);
+}
+window.addEventListener('resize', resizeViz);
+
+function roundRect(c,x,y,w,h,r){
+  r = Math.min(r, w/2, h/2);
+  c.beginPath();
+  c.moveTo(x+r,y);
+  c.lineTo(x+w-r,y);
+  c.quadraticCurveTo(x+w,y,x+w,y+r);
+  c.lineTo(x+w,y+h-r);
+  c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  c.lineTo(x+r,y+h);
+  c.quadraticCurveTo(x,y+h,x,y+h-r);
+  c.lineTo(x,y+r);
+  c.quadraticCurveTo(x,y,x+r,y);
+  c.closePath();
+}
+
+function drawViz(){
+  requestAnimationFrame(drawViz);
+  const w = viz.clientWidth, h = viz.clientHeight;
+  if(!w || !h) return;
+  vctx.clearRect(0,0,w,h);
+
+  if(!analyser || !ctx){
+    vctx.fillStyle = 'rgba(255,224,0,.12)';
+    vctx.fillRect(0, h-2, w, 2);
+    return;
+  }
+  if(!freqData) freqData = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(freqData);
+
+  const bars = 58;
+  const gap = 2;
+  const bw = (w - gap*(bars-1)) / bars;
+
+  const grad = vctx.createLinearGradient(0,h,0,0);
+  grad.addColorStop(0,'rgba(255,224,0,.95)');
+  grad.addColorStop(.55,'rgba(255,175,0,.7)');
+  grad.addColorStop(1,'rgba(255,43,214,.35)');
+
+  vctx.fillStyle = grad;
+  vctx.shadowColor = 'rgba(255,214,0,.55)';
+  vctx.shadowBlur = 12;
+
+  for(let i=0;i<bars;i++){
+    const r = i / bars;
+    const idx = Math.min(freqData.length-1, Math.floor(Math.pow(r,1.65) * 470) + 1);
+    const v = freqData[idx] / 255;
+    const bh = Math.max(2, Math.pow(v,1.25) * h * 0.9);
+    roundRect(vctx, i*(bw+gap), h-bh, bw, bh, 2.5);
+    vctx.fill();
+  }
+  vctx.shadowBlur = 0;
+}
+
+/* =========================================================
+   راهاندازی
+   ========================================================= */
+resizeViz();
+drawViz();
+updateSongUI();
+
+// اسکرول افقی را روی محدودهی وسط (دو اکتاو میانی) تنظیم کن
+window.addEventListener('load', ()=>{
+  const sc = document.getElementById('pianoScroll');
+  const total = sc.scrollWidth - sc.clientWidth;
+  if(total > 0) sc.scrollLeft = total * 0.33;
+  resizeViz();
+});
+
+// اولین لمس/کلیک در هر جای صفحه، AudioContext را فعال میکند
+['pointerdown','keydown','touchstart'].forEach(ev=>{
+  window.addEventListener(ev, ()=>{ ensureAudio(); }, {once:true, passive:true});
+});
+</script>
+</body>
+</html>
